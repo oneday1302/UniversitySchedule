@@ -1,2 +1,2 @@
-insert into university.groups ("id", "name")
-values (1, '11A'), (2, '11B'), (3, '11C'), (4, '11D');
+insert into university.groups ("name")
+values ('11A'), ('11B'), ('11C'), ('11D');
