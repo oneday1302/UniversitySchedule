@@ -1,30 +1,22 @@
 package ua.foxminded.javaspring.universityschedule.controllers.admin;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ua.foxminded.javaspring.universityschedule.entities.Role;
-import ua.foxminded.javaspring.universityschedule.entities.Teacher;
+import org.springframework.web.bind.annotation.*;
+import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
-import ua.foxminded.javaspring.universityschedule.services.EmailService;
 import ua.foxminded.javaspring.universityschedule.services.TeacherService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
 import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
 
-import java.util.List;
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Controller
 public class TeacherController {
 
     private final PasswordGenerator passwordGenerator;
-    private final EmailService emailService;
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final TeacherService teacherService;
     private final CourseService courseService;
@@ -33,36 +25,16 @@ public class TeacherController {
 
     @GetMapping("/admin/addTeacher")
     public String addTeacher(Model model) {
+        char[] password = passwordGenerator.generate();
         model.addAttribute("courses", courseService.getAll());
-        model.addAttribute("password", passwordGenerator.generate());
+        model.addAttribute("password", password);
+        Arrays.fill(password, '\0');
         return "/admin/add/teacher";
     }
 
     @PostMapping("/admin/addTeacher")
-    public String saveTeacher(@RequestParam String username,
-                              @RequestParam String password,
-                              @RequestParam String firstName,
-                              @RequestParam String lastName,
-                              @RequestParam String email,
-                              @RequestParam(required = false) List<String> courses,
-                              @RequestParam(defaultValue = "false") boolean admin) {
-
-        Teacher teacher = new Teacher(username, passwordEncoder.encode(password), email, firstName, lastName);
-
-        if (courses != null) {
-            for (String course : courses) {
-                teacher.addCourse(courseService.findByName(course));
-            }
-        }
-
-        if (admin) {
-            teacher.addRole(Role.ADMIN);
-        }
-
-        teacherService.add(teacher);
-
-        emailService.sendEmail(email, firstName + " " + lastName, String.format(emailBodyFormat, username, password));
-
+    public String saveTeacher(@ModelAttribute TeacherDTO dto) {
+        teacherService.add(dto);
         return "redirect:/admin/home";
     }
 
@@ -80,30 +52,9 @@ public class TeacherController {
     }
 
     @PostMapping("/admin/editTeacher/{id}")
-    public String postEditTeacher(@PathVariable(value = "id") long id,
-                                  @RequestParam String firstName,
-                                  @RequestParam String lastName,
-                                  @RequestParam(required = false) List<String> courses,
-                                  @RequestParam(defaultValue = "false") boolean admin) {
-
-        Teacher teacher = teacherService.findById(id);
-
-        teacher.setFirstName(firstName);
-        teacher.setLastName(lastName);
-        if (admin) {
-            teacher.addRole(Role.ADMIN);
-        } else {
-            teacher.removeRole(Role.ADMIN);
-        }
-        teacher.clearCourse();
-        if (courses != null) {
-            for (String course : courses) {
-                teacher.addCourse(courseService.findByName(course));
-            }
-        }
-
-        teacherService.update(teacher);
-
+    public String postEditTeacher(@PathVariable(value = "id") long id, @ModelAttribute TeacherDTO dto) {
+        dto.setId(id);
+        teacherService.update(dto);
         return "redirect:/admin/teachers";
     }
 

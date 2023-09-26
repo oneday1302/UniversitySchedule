@@ -1,13 +1,9 @@
 package ua.foxminded.javaspring.universityschedule.entities;
 
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @NoArgsConstructor
 @Getter
@@ -16,15 +12,13 @@ import java.util.List;
 @Entity
 @Table(name = "users", schema = "university")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements UserDetails {
-
-    private static final long serialVersionUID = 1L;
+public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="users_seq")
+    @SequenceGenerator(name="users_seq", schema = "university", sequenceName="users_seq", allocationSize = 1)
     private long id;
 
-    @Setter
     @Column(unique = true)
     private String username;
 
@@ -47,7 +41,7 @@ public class User implements UserDetails {
     @CollectionTable(name = "users_roles", schema = "university", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private List<Role> roles = new ArrayList<>();
+    private final Set<Role> roles = new HashSet<>();
 
     public User(String username, String password, String email, String firstName, String lastName) {
         this.username = username;
@@ -65,11 +59,6 @@ public class User implements UserDetails {
         if (role == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-
-        if (roles.contains(role)) {
-            return;
-        }
-
         roles.add(role);
     }
 
@@ -81,40 +70,10 @@ public class User implements UserDetails {
         if (!roles.contains(role)) {
             return;
         }
-
         roles.remove(role);
     }
 
     public boolean hasRole(Role role) {
         return roles.contains(role);
-    }
-
-    public boolean hasRole(String role) {
-        return roles.contains(Role.valueOf(role));
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

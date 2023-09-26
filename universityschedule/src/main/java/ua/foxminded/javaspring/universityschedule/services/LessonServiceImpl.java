@@ -4,12 +4,14 @@ import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
-import ua.foxminded.javaspring.universityschedule.entities.Lesson;
-import ua.foxminded.javaspring.universityschedule.entities.QLesson;
+import ua.foxminded.javaspring.universityschedule.dto.LessonDTO;
+import ua.foxminded.javaspring.universityschedule.entities.*;
 import ua.foxminded.javaspring.universityschedule.repositories.LessonRepository;
 import ua.foxminded.javaspring.universityschedule.utils.LessonFilter;
 import ua.foxminded.javaspring.universityschedule.utils.QPredicates;
 
+import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,38 +19,102 @@ import java.util.List;
 public class LessonServiceImpl implements LessonService {
 
     private final LessonRepository repository;
+    private final CourseService courseService;
+    private final TeacherService teacherService;
+    private final GroupService groupService;
+    private final ClassroomService classroomService;
 
+    @Transactional
     @Override
-    public void add(Lesson lesson) {
-        if (lesson == null) {
+    public void add(LessonDTO dto) {
+        if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-
+        Lesson lesson = Lesson.builder()
+                              .course(courseService.findById(dto.getCourseId()))
+                              .teacher(teacherService.findById(dto.getTeacherId()))
+                              .group(groupService.findById(dto.getGroupId()))
+                              .classroom(classroomService.findById(dto.getClassroomId()))
+                              .date(dto.getDate())
+                              .startTime(dto.getStartTime())
+                              .endTime(dto.getEndTime())
+                              .build();
         repository.save(lesson);
     }
 
+    @Transactional
     @Override
-    public void update(Lesson lesson) {
-        if (lesson == null) {
+    public void update(LessonDTO dto) {
+        if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-
+        Lesson lesson = findById(dto.getId());
+        lesson.setCourse(courseService.findById(dto.getCourseId()));
+        lesson.setTeacher(teacherService.findById(dto.getTeacherId()));
+        lesson.setGroup(groupService.findById(dto.getGroupId()));
+        lesson.setClassroom(classroomService.findById(dto.getClassroomId()));
+        lesson.setDate(dto.getDate());
+        lesson.setStartTime(dto.getStartTime());
+        lesson.setEndTime(dto.getEndTime());
         repository.save(lesson);
     }
 
+    @Transactional
     @Override
-    public List<Lesson> findByFilter(LessonFilter filter) {
-        if (filter == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
+    public List<Lesson> findByFilter(LessonDTO dto) {
+        Course course = null;
+        if (dto.getCourseId() != 0) {
+            course = courseService.findById(dto.getCourseId());
         }
 
-        Predicate predicate = QPredicates.builder().add(filter.getCourse(), QLesson.lesson.course::eq)
-                                                   .add(filter.getTeacher(), QLesson.lesson.teacher::eq)
-                                                   .add(filter.getGroup(), QLesson.lesson.group::eq)
-                                                   .add(filter.getClassroom(), QLesson.lesson.classroom::eq)
-                                                   .add(filter.getFrom(), QLesson.lesson.date::after)
-                                                   .add(filter.getTo(), QLesson.lesson.date::before)
-                                                   .buildAnd();
+        Teacher teacher = null;
+        if (dto.getTeacherId() != 0) {
+            teacher = teacherService.findById(dto.getTeacherId());
+        }
+
+        Group group = null;
+        if (dto.getGroupId() != 0) {
+            group = groupService.findById(dto.getGroupId());
+        }
+
+        Classroom classroom = null;
+        if (dto.getClassroomId() != 0) {
+            classroom = classroomService.findById(dto.getClassroomId());
+        }
+
+        LocalDate from = null;
+        if (dto.getDateFrom() != null) {
+            from = dto.getDateFrom();
+        }
+
+        LocalDate to = null;
+        if (dto.getDateTo() != null) {
+            to = dto.getDateTo();
+        }
+
+        if (from == null && to == null) {
+            LocalDate initial = LocalDate.now();
+            from = initial.withDayOfMonth(1);
+            to = initial.withDayOfMonth(initial.lengthOfMonth());
+        }
+
+        LessonFilter filter = LessonFilter.builder()
+                                          .course(course)
+                                          .teacher(teacher)
+                                          .group(group)
+                                          .classroom(classroom)
+                                          .from(from)
+                                          .to(to)
+                                          .build();
+
+        Predicate predicate = QPredicates.builder()
+                                         .add(filter.getCourse(), QLesson.lesson.course::eq)
+                                         .add(filter.getTeacher(), QLesson.lesson.teacher::eq)
+                                         .add(filter.getGroup(), QLesson.lesson.group::eq)
+                                         .add(filter.getClassroom(), QLesson.lesson.classroom::eq)
+                                         .add(filter.getFrom(), QLesson.lesson.date::after)
+                                         .add(filter.getTo(), QLesson.lesson.date::before)
+                                         .buildAnd();
 
         return Streamable.of(repository.findAll(predicate)).toList();
     }
@@ -61,15 +127,6 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public List<Lesson> getAll() {
         return repository.findAll();
-    }
-
-    @Override
-    public void remove(Lesson lesson) {
-        if (lesson == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
-        }
-
-        repository.delete(lesson);
     }
 
     @Override

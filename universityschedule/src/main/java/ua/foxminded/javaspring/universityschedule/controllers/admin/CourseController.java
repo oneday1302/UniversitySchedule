@@ -3,11 +3,8 @@ package ua.foxminded.javaspring.universityschedule.controllers.admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ua.foxminded.javaspring.universityschedule.entities.Course;
+import org.springframework.web.bind.annotation.*;
+import ua.foxminded.javaspring.universityschedule.dto.CourseDTO;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 
 @RequiredArgsConstructor
@@ -22,8 +19,8 @@ public class CourseController {
     }
 
     @PostMapping("/admin/addCourse")
-    public String saveCourse(@RequestParam String name) {
-        courseService.add(new Course(name));
+    public String saveCourse(@ModelAttribute CourseDTO dto) {
+        courseService.add(dto);
         return "redirect:/admin/home";
     }
 
@@ -40,10 +37,9 @@ public class CourseController {
     }
 
     @PostMapping("/admin/editCourse/{id}")
-    public String postEditCourse(@PathVariable(value = "id") long id, @RequestParam String name) {
-        Course course = courseService.findById(id);
-        course.setName(name);
-        courseService.update(course);
+    public String postEditCourse(@PathVariable(value = "id") long id, @ModelAttribute CourseDTO dto) {
+        dto.setId(id);
+        courseService.update(dto);
         return "redirect:/admin/courses";
     }
 

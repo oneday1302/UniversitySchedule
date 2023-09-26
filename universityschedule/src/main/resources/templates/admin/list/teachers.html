@@ -36,7 +36,6 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Full name</th>
-                <th scope="col">Username</th>
                 <th scope="col">Email</th>
                 <th scope="col">Course</th>
                 <th scope="col">Action</th>
@@ -45,8 +44,7 @@
             <tbody>
             <tr th:each="teacher : ${teachers}">
                 <td th:text="${teacher.getId}">
-                <td th:text="${teacher.getFirstName} + ' ' + ${teacher.getLastName}">
-                <td th:text="${teacher.getUsername}">
+                <td th:text="${teacher.getFullName}">
                 <td th:text="${teacher.getEmail}">
                 <td>
                     <span th:each="course, iterStat : ${teacher.getCourses}" th:text="!${iterStat.last} ? ${course.getName} + ', ' : ${course.getName}"></span>

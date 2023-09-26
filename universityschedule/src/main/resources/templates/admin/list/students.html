@@ -35,7 +35,6 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Full name</th>
-                <th scope="col">Username</th>
                 <th scope="col">Email</th>
                 <th scope="col">Group</th>
                 <th scope="col">Action</th>
@@ -45,7 +44,6 @@
             <tr th:each="student : ${students}">
                 <td th:text="${student.getId}">
                 <td th:text="${student.getFullName}">
-                <td th:text="${student.getUsername}">
                 <td th:text="${student.getEmail}">
                 <td th:text="${student.getGroup.getName}">
                 <td>

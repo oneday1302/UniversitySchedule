@@ -13,7 +13,8 @@ import javax.persistence.*;
 public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="groups_seq")
+    @SequenceGenerator(name="groups_seq", schema = "university", sequenceName="groups_seq", allocationSize = 1)
     private long id;
 
     @Setter

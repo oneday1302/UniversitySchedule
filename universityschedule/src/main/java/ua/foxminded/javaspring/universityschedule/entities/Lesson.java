@@ -9,7 +9,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 @ToString
@@ -18,7 +17,8 @@ import java.time.format.DateTimeFormatter;
 public class Lesson implements Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="lessons_seq")
+    @SequenceGenerator(name="lessons_seq", schema = "university", sequenceName="lessons_seq", allocationSize = 1)
     private long id;
 
     @Setter
@@ -33,7 +33,7 @@ public class Lesson implements Event {
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "gorup_id")
+    @JoinColumn(name = "group_id")
     private Group group;
 
     @Setter
@@ -53,6 +53,7 @@ public class Lesson implements Event {
     @Column(name = "end_time")
     private LocalTime endTime;
 
+    @Builder
     public Lesson(Course course, Teacher teacher, Group group, Classroom classroom, LocalDate date, LocalTime startTime, LocalTime endTime) {
         this.course = course;
         this.teacher = teacher;
@@ -70,17 +71,15 @@ public class Lesson implements Event {
 
     @Override
     public String getStart() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
-        String format = "%sT%s";
-        return String.format(format, dateFormatter.format(date), timeFormatter.format(startTime));
+        return getDateTime(date, startTime);
     }
 
     @Override
     public String getEnd() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
-        String format = "%sT%s";
-        return String.format(format, dateFormatter.format(date), timeFormatter.format(endTime));
+        return getDateTime(date, endTime);
+    }
+
+    private String getDateTime(LocalDate date, LocalTime time) {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm").format(date.atTime(time));
     }
 }

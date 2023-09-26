@@ -3,11 +3,8 @@ package ua.foxminded.javaspring.universityschedule.controllers.admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ua.foxminded.javaspring.universityschedule.entities.Classroom;
+import org.springframework.web.bind.annotation.*;
+import ua.foxminded.javaspring.universityschedule.dto.ClassroomDTO;
 import ua.foxminded.javaspring.universityschedule.services.ClassroomService;
 
 @RequiredArgsConstructor
@@ -22,8 +19,8 @@ public class ClassroomController {
     }
 
     @PostMapping("/admin/addClassroom")
-    public String saveClassroom(@RequestParam String name) {
-        classroomService.add(new Classroom(name));
+    public String saveClassroom(@ModelAttribute ClassroomDTO dto) {
+        classroomService.add(dto);
         return "redirect:/admin/home";
     }
 
@@ -40,10 +37,9 @@ public class ClassroomController {
     }
 
     @PostMapping("/admin/editClassroom/{id}")
-    public String postEditClassroom(@PathVariable(value = "id") long id, @RequestParam String name) {
-        Classroom classroom = classroomService.findById(id);
-        classroom.setName(name);
-        classroomService.update(classroom);
+    public String postEditClassroom(@PathVariable(value = "id") long id, @ModelAttribute ClassroomDTO dto) {
+        dto.setId(id);
+        classroomService.update(dto);
         return "redirect:/admin/classrooms";
     }
 

@@ -1,13 +1,12 @@
 package ua.foxminded.javaspring.universityschedule.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -17,12 +16,11 @@ import java.util.List;
 @Table(name = "teachers", schema = "university")
 public class Teacher extends User {
 
-    private static final long serialVersionUID = 1L;
-
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(name = "teachers_courses", schema = "university", joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"))
-    List<Course> courses = new ArrayList<>();
+    Set<Course> courses = new HashSet<>();
 
+    @Builder
     public Teacher(String username, String password, String email, String firstName, String lastName) {
         this(username, password, email, firstName, lastName, Role.TEACHER);
     }
@@ -32,35 +30,21 @@ public class Teacher extends User {
         this.addRole(role);
     }
 
-    public void addCourse(Course course) {
-        if (course == null) {
+    public void addCourse(List<Course> course) {
+        if (courses == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
+        courses.addAll(course);
+    }
 
-        if (courses.contains(course)) {
-            return;
-        }
-
-        courses.add(course);
+    public void clearCourse() {
+        courses.clear();
     }
 
     public boolean hasCourse(Course course) {
         if (course == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-
         return courses.contains(course);
-    }
-
-    public void removeCourse(Course course) {
-        if (course == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
-        }
-
-        courses.remove(course);
-    }
-
-    public void clearCourse() {
-        courses.clear();
     }
 }

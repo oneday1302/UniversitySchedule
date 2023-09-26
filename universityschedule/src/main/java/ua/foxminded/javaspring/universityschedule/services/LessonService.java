@@ -1,23 +1,21 @@
 package ua.foxminded.javaspring.universityschedule.services;
 
+import ua.foxminded.javaspring.universityschedule.dto.LessonDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Lesson;
-import ua.foxminded.javaspring.universityschedule.utils.LessonFilter;
 
 import java.util.List;
 
 public interface LessonService {
 
-    void add(Lesson lesson);
+    void add(LessonDTO dto);
 
-    void update(Lesson lesson);
+    void update(LessonDTO dto);
 
-    List<Lesson> findByFilter(LessonFilter filter);
+    List<Lesson> findByFilter(LessonDTO dto);
 
     Lesson findById(long id);
 
     List<Lesson> getAll();
-
-    void remove(Lesson lesson);
 
     void removeById(long id);
 }

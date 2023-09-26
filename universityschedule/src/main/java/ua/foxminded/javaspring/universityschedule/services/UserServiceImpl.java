@@ -1,43 +1,46 @@
 package ua.foxminded.javaspring.universityschedule.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ua.foxminded.javaspring.universityschedule.dto.UserDTO;
 import ua.foxminded.javaspring.universityschedule.entities.User;
 import ua.foxminded.javaspring.universityschedule.repositories.UserRepository;
+
+import java.nio.CharBuffer;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final PasswordEncoder encoder;
 
     @Override
-    public void update(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
+    public User editUserData(User user, UserDTO dto) {
+        if (dto.getFirstName() != null) {
+            user.setFirstName(dto.getFirstName());
         }
-
-        repository.save(user);
+        if (dto.getLastName() != null)  {
+            user.setLastName(dto.getLastName());
+        }
+        if (dto.getEmail() != null) {
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getPassword() != null && dto.getPassword().length != 0) {
+            user.setPassword(encoder.encode(CharBuffer.wrap(dto.getPassword())));
+        }
+        return user;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (username == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
-        }
-
-        return repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+    public User findByUsername(String username) {
+        return repository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("Entity no found."));
     }
 
     @Override
-    public void remove(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
-        }
-
-        repository.delete(user);
+    public User findById(long id) {
+        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Entity no found."));
     }
 
     @Override

@@ -3,11 +3,8 @@ package ua.foxminded.javaspring.universityschedule.controllers.admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ua.foxminded.javaspring.universityschedule.entities.Group;
+import org.springframework.web.bind.annotation.*;
+import ua.foxminded.javaspring.universityschedule.dto.GroupDTO;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
 
 @RequiredArgsConstructor
@@ -22,8 +19,8 @@ public class GroupController {
     }
 
     @PostMapping("/admin/addGroup")
-    public String saveGroup(@RequestParam String name) {
-        groupService.add(new Group(name));
+    public String saveGroup(@ModelAttribute GroupDTO dto) {
+        groupService.add(dto);
         return "redirect:/admin/home";
     }
 
@@ -40,10 +37,9 @@ public class GroupController {
     }
 
     @PostMapping("/admin/editGroup/{id}")
-    public String postEditGroup(@PathVariable(value = "id") long id, @RequestParam String name) {
-        Group group = groupService.findById(id);
-        group.setName(name);
-        groupService.update(group);
+    public String postEditGroup(@PathVariable(value = "id") long id, @ModelAttribute GroupDTO dto) {
+        dto.setId(id);
+        groupService.update(dto);
         return "redirect:/admin/groups";
     }
 

@@ -15,13 +15,12 @@ import javax.persistence.Table;
 @Table(name = "students", schema = "university")
 public class Student extends User {
 
-    private static final long serialVersionUID = 1L;
-
     @Setter
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @Builder
     public Student(String username, String password, String email, String firstName, String lastName, Group group) {
         this(username, password, email, firstName, lastName, group, Role.STUDENT);
     }

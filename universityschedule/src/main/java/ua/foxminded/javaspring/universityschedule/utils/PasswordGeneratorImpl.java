@@ -10,13 +10,13 @@ public class PasswordGeneratorImpl implements PasswordGenerator {
     private final Random random = new Random();
 
     @Override
-    public String generate() {
-        StringBuilder password = new StringBuilder();
-        for(int i = 0; i < 12; i++) {
-            password.append((char)getRandomNum('!', '~'));
+    public char[] generate() {
+        int length = 12;
+        char[] password = new char[length];
+        for(int i = 0; i < length; i++) {
+            password[i] = (char) getRandomNum('!', '~');
         }
-
-        return password.toString();
+        return password;
     }
 
     private int getRandomNum(int min, int max) {

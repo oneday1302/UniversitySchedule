@@ -76,7 +76,7 @@
                         <div class="col-sm-9">
                             <ul class="list-group">
                                 <li class="list-group-item" th:each="el : ${courses}">
-                                    <input class="form-check-input me-1" type="checkbox" name="courses" th:value=${el.getName} th:text="${el.getName}">
+                                    <input class="form-check-input me-1" type="checkbox" name="courses" th:value=${el.getId} th:text="${el.getName}">
                                 </li>
                             </ul>
                         </div>
@@ -89,7 +89,7 @@
                         <div class="col-sm-9">
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" name="admin">Admin
+                                    <input class="form-check-input me-1" type="checkbox" name="isAdmin">Admin
                                 </li>
                             </ul>
                         </div>

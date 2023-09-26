@@ -1,27 +1,22 @@
 package ua.foxminded.javaspring.universityschedule.controllers.admin;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ua.foxminded.javaspring.universityschedule.entities.Student;
-import ua.foxminded.javaspring.universityschedule.services.EmailService;
+import org.springframework.web.bind.annotation.*;
+import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
 import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
+
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Controller
 public class StudentController {
 
     private final PasswordGenerator passwordGenerator;
-    private final EmailService emailService;
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final StudentService studentService;
     private final GroupService groupService;
@@ -30,29 +25,19 @@ public class StudentController {
 
     @GetMapping("/admin/addStudent")
     public String addStudent(Model model) {
+        char[] password = passwordGenerator.generate();
         model.addAttribute("groups", groupService.getAll());
-        model.addAttribute("password", passwordGenerator.generate());
+        model.addAttribute("password", password);
+        Arrays.fill(password, '\0');
         return "/admin/add/student";
     }
 
     @PostMapping("/admin/addStudent")
-    public String saveStudent(@RequestParam String username,
-                              @RequestParam String password,
-                              @RequestParam String firstName,
-                              @RequestParam String lastName,
-                              @RequestParam String email,
-                              @RequestParam String group) {
-
-        if (group.equals("Choose group")) {
+    public String saveStudent(@ModelAttribute StudentDTO dto) {
+        if (dto.getGroupId() == 0) {
             throw new IllegalArgumentException("Not selected group");
         }
-
-        Student student = new Student(username, passwordEncoder.encode(password), email, firstName, lastName, groupService.findByName(group));
-
-        studentService.add(student);
-
-        emailService.sendEmail(email, firstName + " " + lastName, String.format(emailBodyFormat, username, password));
-
+        studentService.add(dto);
         return "redirect:/admin/home";
     }
 
@@ -70,18 +55,9 @@ public class StudentController {
     }
 
     @PostMapping("/admin/editStudent/{id}")
-    public String postEditStudent(@PathVariable(value = "id") long id,
-                                  @RequestParam String firstName,
-                                  @RequestParam String lastName,
-                                  @RequestParam String group) {
-
-        Student student = studentService.findById(id);
-        student.setFirstName(firstName);
-        student.setLastName(lastName);
-        student.setGroup(groupService.findByName(group));
-
-        studentService.update(student);
-
+    public String postEditStudent(@PathVariable(value = "id") long id, @ModelAttribute StudentDTO dto) {
+        dto.setId(id);
+        studentService.update(dto);
         return "redirect:/admin/students";
     }
 

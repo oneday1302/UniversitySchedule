@@ -1,22 +1,19 @@
 package ua.foxminded.javaspring.universityschedule.services;
 
+import ua.foxminded.javaspring.universityschedule.dto.GroupDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Group;
 
 import java.util.List;
 
 public interface GroupService {
 
-    void add(Group group);
+    void add(GroupDTO dto);
 
-    void update(Group group);
-
-    Group findByName(String name);
+    void update(GroupDTO dto);
 
     List<Group> getAll();
 
     Group findById(long id);
-
-    void remove(Group group);
 
     void removeById(long id);
 }

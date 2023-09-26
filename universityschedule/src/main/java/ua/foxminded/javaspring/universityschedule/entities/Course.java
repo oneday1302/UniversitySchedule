@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 @ToString
@@ -14,7 +13,8 @@ import javax.persistence.*;
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="courses_seq")
+    @SequenceGenerator(name="courses_seq", schema = "university", sequenceName="courses_seq", allocationSize = 1)
     private long id;
 
     @Setter

@@ -47,9 +47,9 @@
                             <p class="mb-0">Group</p>
                         </div>
                         <div class="col-sm-9">
-                            <select class="form-select" name="group">
-                                <option th:value="${student.getGroup.getName}" th:text="${student.getGroup.getName}" selected>
-                                <option th:each="group : ${groups}" th:value="${group.getName}" th:text="${group.getName}">
+                            <select class="form-select" name="groupId">
+                                <option th:value="${student.getGroup.getId}" th:text="${student.getGroup.getName}" selected>
+                                <option th:each="group : ${groups}" th:value="${group.getId}" th:text="${group.getName}">
                             </select>
                         </div>
                     </div>

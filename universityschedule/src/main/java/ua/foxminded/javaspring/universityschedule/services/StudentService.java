@@ -1,18 +1,17 @@
 package ua.foxminded.javaspring.universityschedule.services;
 
+import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
 
 import java.util.List;
 
 public interface StudentService {
 
-    void add(Student student);
+    void add(StudentDTO dto);
 
-    void update(Student student);
+    void update(StudentDTO dto);
 
     Student findById(long id);
 
     List<Student> getAll();
-
-    void remove(Student student);
 }

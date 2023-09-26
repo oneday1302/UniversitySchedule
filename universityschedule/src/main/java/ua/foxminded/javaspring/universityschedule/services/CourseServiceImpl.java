@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.universityschedule.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ua.foxminded.javaspring.universityschedule.dto.CourseDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Course;
 import ua.foxminded.javaspring.universityschedule.repositories.CourseRepository;
 
@@ -14,20 +15,20 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository repository;
 
     @Override
-    public void add(Course course) {
-        if (course == null) {
+    public void add(CourseDTO dto) {
+        if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-
-        repository.save(course);
+        repository.save(new Course(dto.getName()));
     }
 
     @Override
-    public void update(Course course) {
-        if (course == null) {
+    public void update(CourseDTO dto) {
+        if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-
+        Course course = findById(dto.getId());
+        course.setName(dto.getName());
         repository.save(course);
     }
 
@@ -37,26 +38,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Course> getAllByListId(List<Long> ids) {
+        return repository.findAllById(ids);
+    }
+
+    @Override
     public Course findById(long id) {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Entity no found."));
-    }
-
-    @Override
-    public Course findByName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
-        }
-
-        return repository.findByName(name).orElseThrow(() -> new IllegalArgumentException("Entity no found."));
-    }
-
-    @Override
-    public void remove(Course course) {
-        if (course == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
-        }
-
-        repository.delete(course);
     }
 
     @Override

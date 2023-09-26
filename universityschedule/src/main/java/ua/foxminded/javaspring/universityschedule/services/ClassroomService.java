@@ -1,22 +1,19 @@
 package ua.foxminded.javaspring.universityschedule.services;
 
+import ua.foxminded.javaspring.universityschedule.dto.ClassroomDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Classroom;
 
 import java.util.List;
 
 public interface ClassroomService {
 
-    void add(Classroom classroom);
+    void add(ClassroomDTO dto);
 
-    void update(Classroom classroom);
+    void update(ClassroomDTO dto);
 
     Classroom findById(long id);
 
-    Classroom findByName(String name);
-
     List<Classroom> getAll();
-
-    void remove(Classroom classroom);
 
     void removeById(long id);
 }
