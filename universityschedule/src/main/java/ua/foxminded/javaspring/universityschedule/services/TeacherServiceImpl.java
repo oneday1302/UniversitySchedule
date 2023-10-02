@@ -7,6 +7,7 @@ import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
 import ua.foxminded.javaspring.universityschedule.entities.Teacher;
 import ua.foxminded.javaspring.universityschedule.repositories.TeacherRepository;
+import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
 
 import javax.transaction.Transactional;
 import java.nio.CharBuffer;
@@ -22,6 +23,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final CourseService courseService;
     private final PasswordEncoder encoder;
     private final EmailService emailService;
+    private final PasswordGenerator passwordGenerator;
 
     private static final String emailBodyFormat = "username: %s| password: %s";
 
@@ -30,9 +32,8 @@ public class TeacherServiceImpl implements TeacherService {
         if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-        char[] password = dto.getPassword();
+        char[] password = passwordGenerator.generate();
         String encoded = encoder.encode(CharBuffer.wrap(password));
-        Arrays.fill(password, '\0');
         Teacher teacher = Teacher.builder()
                                  .username(dto.getUsername())
                                  .password(encoded)
@@ -49,7 +50,8 @@ public class TeacherServiceImpl implements TeacherService {
         repository.save(teacher);
         emailService.sendEmail(teacher.getEmail(),
                                teacher.getFullName(),
-                               String.format(emailBodyFormat, teacher.getUsername(), teacher.getPassword()));
+                               String.format(emailBodyFormat, teacher.getUsername(), String.valueOf(password)));
+        Arrays.fill(password, '\0');
     }
 
     @Transactional

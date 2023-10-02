@@ -8,25 +8,18 @@ import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
-import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
-
-import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Controller
 public class StudentController {
 
-    private final PasswordGenerator passwordGenerator;
     private final UserService userService;
     private final StudentService studentService;
     private final GroupService groupService;
 
-    private static final String emailBodyFormat = "username: %s| password: %s";
-
     @GetMapping("/admin/addStudent")
     public String addStudent(Model model) {
         model.addAttribute("groups", groupService.getAll());
-        model.addAttribute("password", passwordGenerator.generate());
         return "/admin/add/student";
     }
 
