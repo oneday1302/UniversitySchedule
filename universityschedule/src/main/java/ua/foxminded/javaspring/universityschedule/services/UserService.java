@@ -9,8 +9,6 @@ public interface UserService {
 
     User editUserData(User user, UserDTO dto);
 
-    public User findByUsername(String username);
-
     User findById(long id);
 
     void removeById(long id);

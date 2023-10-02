@@ -25,10 +25,8 @@ public class TeacherController {
 
     @GetMapping("/admin/addTeacher")
     public String addTeacher(Model model) {
-        char[] password = passwordGenerator.generate();
         model.addAttribute("courses", courseService.getAll());
-        model.addAttribute("password", password);
-        Arrays.fill(password, '\0');
+        model.addAttribute("password", passwordGenerator.generate());
         return "/admin/add/teacher";
     }
 
@@ -52,8 +50,9 @@ public class TeacherController {
     }
 
     @PostMapping("/admin/editTeacher/{id}")
-    public String postEditTeacher(@PathVariable(value = "id") long id, @ModelAttribute TeacherDTO dto) {
+    public String postEditTeacher(@PathVariable(value = "id") long id, @ModelAttribute TeacherDTO dto, @RequestParam(defaultValue = "false") boolean isAdmin) {
         dto.setId(id);
+        dto.setAdmin(isAdmin);
         teacherService.update(dto);
         return "redirect:/admin/teachers";
     }

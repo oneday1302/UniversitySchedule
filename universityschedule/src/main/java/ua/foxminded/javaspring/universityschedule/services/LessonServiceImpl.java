@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.universityschedule.dto.LessonDTO;
 import ua.foxminded.javaspring.universityschedule.entities.*;
 import ua.foxminded.javaspring.universityschedule.repositories.LessonRepository;
-import ua.foxminded.javaspring.universityschedule.utils.LessonFilter;
 import ua.foxminded.javaspring.universityschedule.utils.QPredicates;
 
 import javax.transaction.Transactional;
@@ -98,22 +97,13 @@ public class LessonServiceImpl implements LessonService {
             to = initial.withDayOfMonth(initial.lengthOfMonth());
         }
 
-        LessonFilter filter = LessonFilter.builder()
-                                          .course(course)
-                                          .teacher(teacher)
-                                          .group(group)
-                                          .classroom(classroom)
-                                          .from(from)
-                                          .to(to)
-                                          .build();
-
         Predicate predicate = QPredicates.builder()
-                                         .add(filter.getCourse(), QLesson.lesson.course::eq)
-                                         .add(filter.getTeacher(), QLesson.lesson.teacher::eq)
-                                         .add(filter.getGroup(), QLesson.lesson.group::eq)
-                                         .add(filter.getClassroom(), QLesson.lesson.classroom::eq)
-                                         .add(filter.getFrom(), QLesson.lesson.date::after)
-                                         .add(filter.getTo(), QLesson.lesson.date::before)
+                                         .add(course, QLesson.lesson.course::eq)
+                                         .add(teacher, QLesson.lesson.teacher::eq)
+                                         .add(group, QLesson.lesson.group::eq)
+                                         .add(classroom, QLesson.lesson.classroom::eq)
+                                         .add(from, QLesson.lesson.date::after)
+                                         .add(to, QLesson.lesson.date::before)
                                          .buildAnd();
 
         return Streamable.of(repository.findAll(predicate)).toList();

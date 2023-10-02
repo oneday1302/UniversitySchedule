@@ -5,8 +5,8 @@ import ua.foxminded.javaspring.universityschedule.utils.Event;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Getter
@@ -70,16 +70,16 @@ public class Lesson implements Event {
     }
 
     @Override
-    public String getStart() {
-        return getDateTime(date, startTime);
+    public LocalDateTime getStart() {
+        return getLocaleDateTime(date, startTime);
     }
 
     @Override
-    public String getEnd() {
-        return getDateTime(date, endTime);
+    public LocalDateTime getEnd() {
+        return getLocaleDateTime(date, endTime);
     }
 
-    private String getDateTime(LocalDate date, LocalTime time) {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm").format(date.atTime(time));
+    private LocalDateTime getLocaleDateTime(LocalDate date, LocalTime time) {
+        return LocalDateTime.of(date, time);
     }
 }

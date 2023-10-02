@@ -34,11 +34,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        return repository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("Entity no found."));
-    }
-
-    @Override
     public User findById(long id) {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Entity no found."));
     }

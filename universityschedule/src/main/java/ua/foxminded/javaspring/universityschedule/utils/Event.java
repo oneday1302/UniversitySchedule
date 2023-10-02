@@ -1,12 +1,14 @@
 package ua.foxminded.javaspring.universityschedule.utils;
 
+import java.time.LocalDateTime;
+
 public interface Event {
 
     long getId();
 
     String getTitle();
 
-    String getStart();
+    LocalDateTime getStart();
 
-    String getEnd();
+    LocalDateTime getEnd();
 }

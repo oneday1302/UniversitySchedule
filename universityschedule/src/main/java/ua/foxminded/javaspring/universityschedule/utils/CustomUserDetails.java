@@ -14,6 +14,10 @@ public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
+    public <T extends User> T unwrap(Class<T> tClass) {
+        return tClass.cast(user);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles();

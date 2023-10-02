@@ -10,9 +10,5 @@ import java.util.List;
 public class TeacherDTO extends UserDTO {
 
     private List<Long> courses;
-    private String isAdmin;
-
-    public boolean getIsAdmin() {
-        return isAdmin != null;
-    }
+    private boolean admin;
 }

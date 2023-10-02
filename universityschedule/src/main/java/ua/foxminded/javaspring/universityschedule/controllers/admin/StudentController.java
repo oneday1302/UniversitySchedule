@@ -25,10 +25,8 @@ public class StudentController {
 
     @GetMapping("/admin/addStudent")
     public String addStudent(Model model) {
-        char[] password = passwordGenerator.generate();
         model.addAttribute("groups", groupService.getAll());
-        model.addAttribute("password", password);
-        Arrays.fill(password, '\0');
+        model.addAttribute("password", passwordGenerator.generate());
         return "/admin/add/student";
     }
 

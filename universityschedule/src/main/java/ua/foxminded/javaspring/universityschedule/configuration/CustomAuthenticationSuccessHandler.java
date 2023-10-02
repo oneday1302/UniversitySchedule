@@ -3,11 +3,10 @@ package ua.foxminded.javaspring.universityschedule.configuration;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
-import ua.foxminded.javaspring.universityschedule.entities.User;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
+import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +21,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        if (user.hasRole(Role.ADMIN)) {
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        if (principal.getAuthorities().contains(Role.ADMIN)) {
             response.sendRedirect("/admin/home");
-        } else if (user.hasRole(Role.TEACHER)) {
+        } else if (principal.getAuthorities().contains(Role.TEACHER)) {
             response.sendRedirect("/teacher/home");
         } else {
             response.sendRedirect("/student/home");

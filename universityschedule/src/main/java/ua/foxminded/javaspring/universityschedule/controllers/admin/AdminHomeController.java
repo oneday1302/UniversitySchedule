@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ua.foxminded.javaspring.universityschedule.dto.LessonDTO;
+import ua.foxminded.javaspring.universityschedule.entities.Lesson;
 import ua.foxminded.javaspring.universityschedule.services.*;
-import ua.foxminded.javaspring.universityschedule.utils.Event;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,8 +24,8 @@ public class AdminHomeController {
 
     @GetMapping("/admin/getEvents")
     @ResponseBody
-    public List<Event> getEvents(@ModelAttribute LessonDTO dto) {
-        return new ArrayList<>(lessonService.findByFilter(dto));
+    public List<Lesson> getEvents(@ModelAttribute LessonDTO dto) {
+        return lessonService.findByFilter(dto);
     }
 
     @GetMapping("/admin/home")

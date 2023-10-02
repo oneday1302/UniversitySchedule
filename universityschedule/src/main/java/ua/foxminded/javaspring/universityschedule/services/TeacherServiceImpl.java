@@ -43,20 +43,20 @@ public class TeacherServiceImpl implements TeacherService {
         if (dto.getCourses() != null) {
             teacher.addCourse(courseService.getAllByListId(dto.getCourses()));
         }
-        if (dto.getIsAdmin()) {
+        if (dto.isAdmin()) {
             teacher.addRole(Role.ADMIN);
         }
         repository.save(teacher);
         emailService.sendEmail(teacher.getEmail(),
-                teacher.getFullName(),
-                String.format(emailBodyFormat, teacher.getUsername(), teacher.getPassword()));
+                               teacher.getFullName(),
+                               String.format(emailBodyFormat, teacher.getUsername(), teacher.getPassword()));
     }
 
     @Transactional
     @Override
     public void update(TeacherDTO dto) {
         Teacher teacher = (Teacher) userService.editUserData(findById(dto.getId()), dto);
-        if (dto.getIsAdmin()) {
+        if (dto.isAdmin()) {
             teacher.addRole(Role.ADMIN);
         } else {
             teacher.removeRole(Role.ADMIN);
