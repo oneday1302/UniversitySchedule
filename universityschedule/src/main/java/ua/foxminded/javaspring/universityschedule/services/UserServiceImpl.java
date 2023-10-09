@@ -18,6 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User editUserData(User user, UserDTO dto) {
+        if (user == null || dto == null) {
+            throw new IllegalArgumentException("Params cannot be null.");
+        }
         if (dto.getFirstName() != null) {
             user.setFirstName(dto.getFirstName());
         }

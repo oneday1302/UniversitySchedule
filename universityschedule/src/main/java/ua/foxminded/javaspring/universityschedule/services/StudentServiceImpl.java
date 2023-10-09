@@ -20,7 +20,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository repository;
     private final GroupService groupService;
     private final UserService userService;
-    private  final PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
     private final EmailService emailService;
     private final PasswordGenerator passwordGenerator;
 

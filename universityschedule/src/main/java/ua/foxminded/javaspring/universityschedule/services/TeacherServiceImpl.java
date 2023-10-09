@@ -57,6 +57,9 @@ public class TeacherServiceImpl implements TeacherService {
     @Transactional
     @Override
     public void update(TeacherDTO dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("Param cannot be null.");
+        }
         Teacher teacher = (Teacher) userService.editUserData(findById(dto.getId()), dto);
         if (dto.isAdmin()) {
             teacher.addRole(Role.ADMIN);

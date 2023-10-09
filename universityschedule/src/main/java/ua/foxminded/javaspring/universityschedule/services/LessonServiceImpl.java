@@ -61,6 +61,10 @@ public class LessonServiceImpl implements LessonService {
     @Transactional
     @Override
     public List<Lesson> findByFilter(LessonDTO dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("Param cannot be null.");
+        }
+
         Course course = null;
         if (dto.getCourseId() != 0) {
             course = courseService.findById(dto.getCourseId());

@@ -13,12 +13,13 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendEmail(String to, String subject, String body) {
+        if (to == null || subject == null || body == null) {
+            throw new IllegalArgumentException("Param cannot be null.");
+        }
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-
         mailSender.send(message);
     }
 }
