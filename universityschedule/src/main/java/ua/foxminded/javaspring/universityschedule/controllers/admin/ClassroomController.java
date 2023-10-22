@@ -1,6 +1,8 @@
 package ua.foxminded.javaspring.universityschedule.controllers.admin;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,8 @@ import ua.foxminded.javaspring.universityschedule.services.ClassroomService;
 
 @RequiredArgsConstructor
 @Controller
+@EnableMethodSecurity
+@PreAuthorize("hasAuthority('ADMIN')")
 public class ClassroomController {
 
     private final ClassroomService classroomService;

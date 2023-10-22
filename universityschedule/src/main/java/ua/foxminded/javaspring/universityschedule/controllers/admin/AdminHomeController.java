@@ -1,6 +1,8 @@
 package ua.foxminded.javaspring.universityschedule.controllers.admin;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@EnableMethodSecurity
+@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminHomeController {
 
     private final LessonService lessonService;

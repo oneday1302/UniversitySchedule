@@ -1,6 +1,8 @@
 package ua.foxminded.javaspring.universityschedule.controllers.student;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@EnableMethodSecurity
+@PreAuthorize("hasAuthority('STUDENT')")
 public class StudentHomeController {
 
     private final LessonService lessonService;
