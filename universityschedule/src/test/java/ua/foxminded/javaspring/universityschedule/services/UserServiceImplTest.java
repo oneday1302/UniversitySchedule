@@ -3,16 +3,14 @@ package ua.foxminded.javaspring.universityschedule.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.foxminded.javaspring.universityschedule.configs.ServiceTestConfig;
 import ua.foxminded.javaspring.universityschedule.dto.UserDTO;
 import ua.foxminded.javaspring.universityschedule.entities.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@MockBean(PasswordEncoder.class)
-@SpringBootTest
+@SpringBootTest(classes = ServiceTestConfig.class)
 public class UserServiceImplTest {
 
     @Autowired

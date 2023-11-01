@@ -50,7 +50,7 @@ public class TeacherServiceImpl implements TeacherService {
         repository.save(teacher);
         emailService.sendEmail(teacher.getEmail(),
                                teacher.getFullName(),
-                               String.format(emailBodyFormat, teacher.getUsername(), String.valueOf(password)));
+                               String.format(emailBodyFormat, teacher.getUsername(), CharBuffer.wrap(password)));
         Arrays.fill(password, '\0');
     }
 

@@ -44,7 +44,7 @@ public class StudentServiceImpl implements StudentService {
         repository.save(student);
         emailService.sendEmail(student.getEmail(),
                                student.getFullName(),
-                               String.format(emailBodyFormat, student.getUsername(), String.valueOf(password)));
+                               String.format(emailBodyFormat, student.getUsername(), CharBuffer.wrap(password)));
         Arrays.fill(password, '\0');
     }
 

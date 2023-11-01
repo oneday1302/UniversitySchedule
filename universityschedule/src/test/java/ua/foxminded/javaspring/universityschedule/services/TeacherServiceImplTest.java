@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.foxminded.javaspring.universityschedule.configs.ServiceTestConfig;
 import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
 import ua.foxminded.javaspring.universityschedule.entities.Teacher;
@@ -17,16 +16,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@MockBeans({@MockBean(PasswordEncoder.class),
-            @MockBean(CourseService.class),
-            @MockBean(EmailService.class)})
-@SpringBootTest
+@SpringBootTest(classes = ServiceTestConfig.class)
+@MockBean(CourseService.class)
+@MockBean(EmailService.class)
 public class TeacherServiceImplTest {
 
-    @MockBean
+    @Autowired
     private TeacherRepository repository;
 
-    @MockBean
+    @Autowired
     private PasswordGenerator generator;
 
     @MockBean
@@ -63,7 +61,6 @@ public class TeacherServiceImplTest {
     @Test
     void update_whenInputParamTeacherDTO() {
         TeacherDTO dto = new TeacherDTO();
-        dto.setId(1);
         Teacher teacher = new Teacher();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(teacher));
         when(userService.editUserData(teacher, dto)).thenReturn(teacher);

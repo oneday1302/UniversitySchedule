@@ -1,11 +1,12 @@
 package ua.foxminded.javaspring.universityschedule.services;
 
 import com.querydsl.core.types.Predicate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
+import ua.foxminded.javaspring.universityschedule.configs.ServiceTestConfig;
 import ua.foxminded.javaspring.universityschedule.dto.LessonDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Lesson;
 import ua.foxminded.javaspring.universityschedule.entities.QLesson;
@@ -21,18 +22,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@MockBeans({@MockBean(CourseService.class),
-            @MockBean(TeacherService.class),
-            @MockBean(GroupService.class),
-            @MockBean(ClassroomService.class)})
-@SpringBootTest
+
+@SpringBootTest(classes = ServiceTestConfig.class)
+@MockBean(CourseService.class)
+@MockBean(TeacherService.class)
+@MockBean(GroupService.class)
+@MockBean(ClassroomService.class)
 public class LessonServiceImplTest {
 
-    @MockBean
+    @Autowired
     private LessonRepository repository;
 
     @Autowired
     private LessonService service;
+
+    @BeforeEach
+    public void mockReset() {
+        reset(repository);
+    }
 
     @Test
     void add_shouldReturnIllegalArgumentException_whenInputParamNull() {
@@ -59,7 +66,6 @@ public class LessonServiceImplTest {
     @Test
     void update_whenInputParamLessonDTO() {
         LessonDTO dto = new LessonDTO();
-        dto.setId(1);
         Lesson lesson = new Lesson();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(lesson));
         service.update(dto);

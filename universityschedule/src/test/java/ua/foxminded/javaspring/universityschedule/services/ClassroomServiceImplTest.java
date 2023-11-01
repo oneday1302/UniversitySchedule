@@ -1,9 +1,10 @@
 package ua.foxminded.javaspring.universityschedule.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import ua.foxminded.javaspring.universityschedule.configs.ServiceTestConfig;
 import ua.foxminded.javaspring.universityschedule.dto.ClassroomDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Classroom;
 import ua.foxminded.javaspring.universityschedule.repositories.ClassroomRepository;
@@ -13,14 +14,19 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(classes = ServiceTestConfig.class)
 public class ClassroomServiceImplTest {
 
-    @MockBean
+    @Autowired
     private ClassroomRepository repository;
 
     @Autowired
     private ClassroomService service;
+
+    @BeforeEach
+    public void mockReset() {
+        reset(repository);
+    }
 
     @Test
     void add_shouldReturnIllegalArgumentException_whenInputParamNull() {
@@ -47,7 +53,6 @@ public class ClassroomServiceImplTest {
     @Test
     void update_whenInputParamClassroomDTO() {
         ClassroomDTO dto = new ClassroomDTO();
-        dto.setId(1);
         Classroom classroom = new Classroom();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(classroom));
         service.update(dto);

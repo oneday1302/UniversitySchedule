@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add lesson</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous">
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous">
+    </script>
+
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script th:src="@{/datepicker.js}"></script>
+</head>
+<body>
+<section style="background-color: #eee; height: 100vh;">
+    <header th:insert="/menu :: menu"></header>
+    <div class="container py-5">
+        <form th:action="@{/addLesson}" method="post">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Course</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="courseId">
+                                <option selected>Choose course</option>
+                                <option th:each="course : ${courses}" th:value="${course.getId}" th:text="${course.getName}">
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Teacher</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="teacherId">
+                                <option selected>Choose teacher</option>
+                                <option th:each="teacher : ${teachers}" th:value="${teacher.getId}" th:text="${teacher.getFullName}">
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Group</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="groupId">
+                                <option selected>Choose group</option>
+                                <option th:each="group : ${groups}" th:value="${group.getId}" th:text="${group.getName}">
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Classroom</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <select class="form-select" name="classroomId">
+                                <option selected>Choose classroom</option>
+                                <option th:each="classroom : ${classrooms}" th:value="${classroom.getId}" th:text="${classroom.getName}">
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Date</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+                                <input class="form-control" type="text" name="date">
+                                <span class="input-group-addon">
+                						<em class="glyphicon glyphicon-calendar"></em>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Start time</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="time" name="startTime">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">End time</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="time" name="endTime">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 80px">Save</button>
+        </form>
+    </div>
+</section>
+</body>
