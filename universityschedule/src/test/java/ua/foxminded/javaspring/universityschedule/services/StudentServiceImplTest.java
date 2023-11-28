@@ -18,7 +18,6 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = ServiceTestConfig.class)
 @MockBean(EmailService.class)
-@MockBean(GroupService.class)
 public class StudentServiceImplTest {
 
     @Autowired
@@ -41,7 +40,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    void add_whenInputParamStudentDTO() {
+    void add_shouldAddStudentToDatabase() {
         StudentDTO dto = new StudentDTO();
         char[] password = {'1'};
         when(generator.generate()).thenReturn(password);
@@ -59,7 +58,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    void update_whenInputParamStudentDTO() {
+    void update_shouldUpdateStudent() {
         StudentDTO dto = new StudentDTO();
         Student student = new Student();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(student));

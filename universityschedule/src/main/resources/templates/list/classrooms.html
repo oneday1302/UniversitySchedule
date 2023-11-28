@@ -26,8 +26,8 @@
   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
   <script th:src="@{/tableSort.js}"></script>
 </head>
-<body>
-<section style="background-color: #eee; height: 100vh;">
+<body style="background-color: #eee; height: 100%;">
+<section>
   <header th:insert="/menu :: menu"></header>
   <div class="container">
     <table id="example" class="table table-striped" style="width:100%">
@@ -43,8 +43,10 @@
         <td th:text="${classroom.getId}">
         <td th:text="${classroom.getName}">
         <td sec:authorize="hasAuthority('ADMIN')">
-          <a th:href="'/editClassroom/' + ${classroom.getId}" class="btn btn-primary" style="width: 80px">Edit</a>
-          <a th:href="'/deleteClassroom/' + ${classroom.getId}" class="btn btn-danger" style="width: 80px">Delete</a>
+        <a th:href="'/editClassroom/' + ${classroom.getId}" class="btn btn-primary" style="width: 80px;" >Edit</a>
+        <form th:action="@{'/deleteClassroom/' + ${classroom.getId}}" th:method="delete" style="display: inline-block;">
+          <button type="submit" class="btn btn-danger" style="width: 80px;" >Delete</button>
+        </form>
         </td>
       </tr>
       </tbody>

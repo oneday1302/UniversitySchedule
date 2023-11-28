@@ -41,10 +41,33 @@ public class CourseControllerTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
+    public void addCourse_shouldReturnAddCourseView() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/addCourse"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/add/course"))
+                .andExpect(model().attributeExists("courseDTO"));;
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void saveCourse_shouldRedirectToAddCourseView_whenRequestParametersNotValid() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/addCourse")
+                                          .param("id", "0")
+                                          .param("name", "")
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/addCourse"));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
     public void saveCourse_shouldRedirectToHomeView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/addCourse")
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection());
+                                          .param("id", "0")
+                                          .param("name", "History")
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/home"));
     }
 
     @Test
@@ -85,22 +108,36 @@ public class CourseControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/editCourse/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/edit/course"))
-                .andExpect(model().attributeExists("course"));
+                .andExpect(model().attributeExists("courseDTO"));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void postEditCourse_shouldRedirectToEditCourseView_whenRequestParametersNotValid() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/editCourse/{id}", 1L)
+                                          .param("id", "0")
+                                          .param("name", "")
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/editCourse/" + 1L));
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void postEditCourse_shouldRedirectToCoursesView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/editCourse/{id}", 1L)
+                                          .param("id", "1")
+                                          .param("name", "History")
                                           .with(csrf()))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/courses"));
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void deleteCourse_shouldRedirectToCoursesView() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/deleteCourse/{id}", 1L)
-                        .with(csrf()))
+        mvc.perform(MockMvcRequestBuilders.delete("/deleteCourse/{id}", 1L)
+                                          .with(csrf()))
                 .andExpect(status().is3xxRedirection());
     }
 }

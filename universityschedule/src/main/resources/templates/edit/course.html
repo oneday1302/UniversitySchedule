@@ -17,11 +17,11 @@
             crossorigin="anonymous">
     </script>
 </head>
-<body>
-<section style="background-color: #eee; height: 100vh;">
+<body style="background-color: #eee; height: 100%;">
+<section>
     <header th:insert="/menu :: menu"></header>
     <div class="container py-5">
-        <form th:action="@{'/editCourse/' + ${course.getId}}" method="post">
+        <form th:action="@{'/editCourse/' + *{id}}" th:object="${courseDTO}" method="post">
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row">
@@ -29,7 +29,8 @@
                             <p class="mb-0">Name</p>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="name" th:value="${course.getName}">
+                            <input class="form-control" type="text" name="name" th:field="*{name}">
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                         </div>
                     </div>
                 </div>

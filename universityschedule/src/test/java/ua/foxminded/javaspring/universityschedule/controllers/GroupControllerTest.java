@@ -41,10 +41,34 @@ public class GroupControllerTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
+    public void addGroup_shouldReturnAddGroupView() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/addGroup")
+                                          .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/add/group"))
+                .andExpect(model().attributeExists("groupDTO"));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void saveGroup_shouldRedirectAddGroupView_whenRequestParametersNotValid() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/addGroup")
+                                          .param("id", "0")
+                                          .param("name", "")
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/addGroup"));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
     public void saveGroup_shouldRedirectToHomeView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/addGroup")
+                                          .param("id", "0")
+                                          .param("name", "11A")
                                           .with(csrf()))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/home"));
     }
 
     @Test
@@ -86,21 +110,35 @@ public class GroupControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/editGroup/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/edit/group"))
-                .andExpect(model().attributeExists("group"));
+                .andExpect(model().attributeExists("groupDTO"));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void postEditGroup_shouldRedirectToEditGroupView_whenRequestParametersNotValid() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/editGroup/{id}", 1L)
+                                          .param("id", "0")
+                                          .param("name", "")
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/editGroup/" + 1L));
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void postEditGroup_shouldRedirectToGroupsView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/editGroup/{id}", 1L)
+                                          .param("id", "1")
+                                          .param("name", "11A")
                                           .with(csrf()))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/groups"));
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void deleteGroup_shouldRedirectToGroupsView() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/deleteGroup/{id}", 1L)
+        mvc.perform(MockMvcRequestBuilders.delete("/deleteGroup/{id}", 1L)
                                           .with(csrf()))
                 .andExpect(status().is3xxRedirection());
     }

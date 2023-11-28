@@ -17,11 +17,11 @@
             crossorigin="anonymous">
     </script>
 </head>
-<body>
-<section style="background-color: #eee; height: 100vh;">
+<body style="background-color: #eee; height: 100%;">
+<section>
     <header th:insert="/menu :: menu"></header>
     <div class="container py-5">
-        <form th:action="@{/addTeacher}" method="post">
+        <form th:action="@{/addTeacher}" th:object="${teacherDTO}" method="post">
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row">
@@ -29,7 +29,8 @@
                             <p class="mb-0">Username</p>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="username">
+                            <input class="form-control" type="text" name="username" th:field="*{username}">
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
                         </div>
                     </div>
                     <hr>
@@ -38,7 +39,8 @@
                             <p class="mb-0">First Name</p>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="firstName">
+                            <input class="form-control" type="text" name="firstName" th:field="*{firstName}">
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
                         </div>
                     </div>
                     <hr>
@@ -47,7 +49,8 @@
                             <p class="mb-0">Last Name</p>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="lastName">
+                            <input class="form-control" type="text" name="lastName" th:field="*{lastName}">
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
                         </div>
                     </div>
                     <hr>
@@ -56,7 +59,8 @@
                             <p class="mb-0">Email</p>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="email">
+                            <input class="form-control" type="text" name="email" th:field="*{email}">
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                         </div>
                     </div>
                     <hr>
@@ -66,10 +70,16 @@
                         </div>
                         <div class="col-sm-9">
                             <ul class="list-group">
-                                <li class="list-group-item" th:each="el : ${courses}">
-                                    <input class="form-check-input me-1" type="checkbox" name="courses" th:value=${el.getId} th:text="${el.getName}">
+                                <li class="list-group-item" th:each="course : ${courses}">
+                                    <input class="form-check-input me-1"
+                                           type="checkbox"
+                                           name="courses"
+                                           th:value="${course.getId}"
+                                           th:text="${course.getName}"
+                                           th:checked="${teacherDTO.getCourses() != null} ? ${teacherDTO.getCourses().contains(course)}">
                                 </li>
                             </ul>
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('courses')}" th:errors="*{courses}"></div>
                         </div>
                     </div>
                     <hr>
@@ -80,7 +90,7 @@
                         <div class="col-sm-9">
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" name="isAdmin">Admin
+                                    <input class="form-check-input me-1" type="checkbox" th:field="*{admin}">Admin
                                 </li>
                             </ul>
                         </div>

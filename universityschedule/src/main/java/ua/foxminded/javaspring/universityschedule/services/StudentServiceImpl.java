@@ -8,7 +8,6 @@ import ua.foxminded.javaspring.universityschedule.entities.Student;
 import ua.foxminded.javaspring.universityschedule.repositories.StudentRepository;
 import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
 
-import javax.transaction.Transactional;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository repository;
-    private final GroupService groupService;
     private final UserService userService;
     private final PasswordEncoder encoder;
     private final EmailService emailService;
@@ -39,7 +37,7 @@ public class StudentServiceImpl implements StudentService {
                                  .email(dto.getEmail())
                                  .firstName(dto.getFirstName())
                                  .lastName(dto.getLastName())
-                                 .group(groupService.findById(dto.getGroupId()))
+                                 .group(dto.getGroup())
                                  .build();
         repository.save(student);
         emailService.sendEmail(student.getEmail(),
@@ -48,14 +46,15 @@ public class StudentServiceImpl implements StudentService {
         Arrays.fill(password, '\0');
     }
 
-    @Transactional
     @Override
     public void update(StudentDTO dto) {
         if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
         Student student = (Student) userService.editUserData(findById(dto.getId()), dto);
-        student.setGroup(groupService.findById(dto.getGroupId()));
+        if (dto.getGroup() != null) {
+            student.setGroup(dto.getGroup());
+        }
         repository.save(student);
     }
 

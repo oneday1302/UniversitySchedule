@@ -7,12 +7,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ua.foxminded.javaspring.universityschedule.dto.PasswordDTO;
+import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
 import ua.foxminded.javaspring.universityschedule.entities.Teacher;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.TeacherService;
+import ua.foxminded.javaspring.universityschedule.services.UserService;
 import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -23,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(StudentService.class)
 @MockBean(TeacherService.class)
 @MockBean(CourseService.class)
+@MockBean(UserService.class)
 public class ProfileControllerTest {
 
     @Autowired
@@ -40,7 +44,7 @@ public class ProfileControllerTest {
         Teacher teacher = new Teacher();
         teacher.addRole(Role.TEACHER);
         mvc.perform(MockMvcRequestBuilders.get("/profile")
-                        .with(user(new CustomUserDetails(teacher))))
+                                          .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/profile"))
                 .andExpect(model().attributeExists("user"));
@@ -56,12 +60,13 @@ public class ProfileControllerTest {
     @Test
     public void editProfile_shouldReturnViewEditProfileAdmin() throws Exception {
         Teacher teacher = new Teacher();
+        teacher.addRole(Role.TEACHER);
         teacher.addRole(Role.ADMIN);
         mvc.perform(MockMvcRequestBuilders.get("/profile/edit")
-                        .with(user(new CustomUserDetails(teacher))))
+                                          .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/editProfile"))
-                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("userDTO"))
                 .andExpect(model().attributeExists("courses"));
     }
 
@@ -70,10 +75,10 @@ public class ProfileControllerTest {
         Teacher teacher = new Teacher();
         teacher.addRole(Role.TEACHER);
         mvc.perform(MockMvcRequestBuilders.get("/profile/edit")
-                        .with(user(new CustomUserDetails(teacher))))
+                                          .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/editProfile"))
-                .andExpect(model().attributeExists("user"));
+                .andExpect(model().attributeExists("userDTO"));
     }
 
     @Test
@@ -81,19 +86,124 @@ public class ProfileControllerTest {
         Student student = new Student();
         student.addRole(Role.STUDENT);
         mvc.perform(MockMvcRequestBuilders.get("/profile/edit")
-                        .with(user(new CustomUserDetails(student))))
+                                          .with(user(new CustomUserDetails(student))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/editProfile"))
-                .andExpect(model().attributeExists("user"));
+                .andExpect(model().attributeExists("userDTO"));
     }
 
     @Test
-    public void postEditProfile_shouldRedirectToProfileView() throws Exception {
+    public void postEditProfile_shouldRedirectToAdminProfileViewIfUserIsAdmin() throws Exception {
+        Teacher teacher = new Teacher();
+        teacher.addRole(Role.TEACHER);
+        teacher.addRole(Role.ADMIN);
+        mvc.perform(MockMvcRequestBuilders.post("/profile/edit")
+                                          .with(user(new CustomUserDetails(teacher)))
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile/editAdminProfile"));
+    }
+
+    @Test
+    public void postEditProfile_shouldRedirectToUserProfileViewIfUserNotAdmin() throws Exception {
         Teacher teacher = new Teacher();
         teacher.addRole(Role.TEACHER);
         mvc.perform(MockMvcRequestBuilders.post("/profile/edit")
-                        .with(user(new CustomUserDetails(teacher)))
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection());
+                                          .with(user(new CustomUserDetails(teacher)))
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile/editUserProfile"));
+    }
+
+    @Test
+    public void editAdminProfile_shouldRedirectToEditProfileView_whenRequestParametersNotValid() throws Exception {
+        Teacher teacher = new Teacher();
+        teacher.addRole(Role.TEACHER);
+        teacher.addRole(Role.ADMIN);
+        mvc.perform(MockMvcRequestBuilders.get("/profile/editAdminProfile")
+                                          .with(user(new CustomUserDetails(teacher)))
+                                          .flashAttr("userDTO", new TeacherDTO()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile/edit"));
+    }
+
+    @Test
+    public void editAdminProfile_shouldRedirectToProfileView() throws Exception {
+        Teacher teacher = Teacher.builder()
+                                 .firstName("test")
+                                 .lastName("test")
+                                 .email("test@gmail.com")
+                                 .build();
+        teacher.addRole(Role.TEACHER);
+        teacher.addRole(Role.ADMIN);
+        mvc.perform(MockMvcRequestBuilders.get("/profile/editAdminProfile")
+                                          .with(user(new CustomUserDetails(teacher)))
+                                          .flashAttr("userDTO", new TeacherDTO(teacher)))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile"));
+    }
+
+    @Test
+    public void editUserProfile_shouldRedirectToEditProfileView_whenRequestParametersNotValid() throws Exception {
+        Teacher teacher = new Teacher();
+        teacher.addRole(Role.TEACHER);
+        teacher.addRole(Role.ADMIN);
+        mvc.perform(MockMvcRequestBuilders.get("/profile/editUserProfile")
+                                          .with(user(new CustomUserDetails(teacher)))
+                                          .flashAttr("userDTO", new TeacherDTO()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile/edit"));
+    }
+
+    @Test
+    public void editUserProfile_shouldRedirectToProfileView() throws Exception {
+        Teacher teacher = Teacher.builder()
+                                 .firstName("test")
+                                 .lastName("test")
+                                 .email("test@gmail.com")
+                                 .build();
+        teacher.addRole(Role.TEACHER);
+        teacher.addRole(Role.ADMIN);
+        TeacherDTO dto = new TeacherDTO(teacher);
+        dto.setCourses(null);
+        mvc.perform(MockMvcRequestBuilders.get("/profile/editUserProfile")
+                                          .with(user(new CustomUserDetails(teacher)))
+                                          .flashAttr("userDTO", dto))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile"));
+    }
+
+    @Test
+    public void editPassword_shouldReturnEditPasswordView() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/profile/editPassword")
+                                          .with(user(new CustomUserDetails(new Teacher()))))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("passwordDTO"))
+                .andExpect(view().name("/editPassword"));
+    }
+
+    @Test
+    public void postEditPassword_shouldRedirectToEditPasswordView_whenRequestParametersNotValid() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/profile/editPassword")
+                                          .with(user(new CustomUserDetails(new Teacher())))
+                                          .flashAttr("passwordDTO", new PasswordDTO())
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile/editPassword"));
+    }
+
+    @Test
+    public void postEditPassword_shouldRedirectToProfileView() throws Exception {
+        PasswordDTO dto = new PasswordDTO();
+        dto.setCurrentPassword("test".toCharArray());
+        dto.setNewPassword("test".toCharArray());
+        dto.setPasswordConfirmation("test".toCharArray());
+
+        mvc.perform(MockMvcRequestBuilders.post("/profile/editPassword")
+                                          .with(user(new CustomUserDetails(new Teacher())))
+                                          .flashAttr("passwordDTO", dto)
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/profile"));
     }
 }

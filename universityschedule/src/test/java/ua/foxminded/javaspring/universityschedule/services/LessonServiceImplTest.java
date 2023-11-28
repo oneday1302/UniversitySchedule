@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import ua.foxminded.javaspring.universityschedule.configs.ServiceTestConfig;
 import ua.foxminded.javaspring.universityschedule.dto.LessonDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Lesson;
@@ -24,10 +23,6 @@ import static org.mockito.Mockito.*;
 
 
 @SpringBootTest(classes = ServiceTestConfig.class)
-@MockBean(CourseService.class)
-@MockBean(TeacherService.class)
-@MockBean(GroupService.class)
-@MockBean(ClassroomService.class)
 public class LessonServiceImplTest {
 
     @Autowired
@@ -49,7 +44,7 @@ public class LessonServiceImplTest {
     }
 
     @Test
-    void add_whenInputParamLessonDTO() {
+    void add_shouldAddLessonToDatabase() {
         LessonDTO dto = new LessonDTO();
         service.add(dto);
         Lesson lesson = new Lesson();
@@ -64,7 +59,7 @@ public class LessonServiceImplTest {
     }
 
     @Test
-    void update_whenInputParamLessonDTO() {
+    void update_shouldUpdateLesson() {
         LessonDTO dto = new LessonDTO();
         Lesson lesson = new Lesson();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(lesson));

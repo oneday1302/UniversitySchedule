@@ -45,7 +45,6 @@ public class HomeControllerTest {
                                           .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/home"))
-                .andExpect(model().attributeExists("role"))
                 .andExpect(model().attributeExists("courses"))
                 .andExpect(model().attributeExists("teachers"))
                 .andExpect(model().attributeExists("groups"))

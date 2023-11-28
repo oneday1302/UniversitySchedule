@@ -36,7 +36,7 @@ public class ClassroomServiceImplTest {
     }
 
     @Test
-    void add_whenInputParamClassroomDTO() {
+    void add_shouldAddClassroomToDatabase() {
         ClassroomDTO dto = new ClassroomDTO();
         service.add(dto);
         Classroom classroom = new Classroom();
@@ -51,7 +51,7 @@ public class ClassroomServiceImplTest {
     }
 
     @Test
-    void update_whenInputParamClassroomDTO() {
+    void update_shouldUpdateClassroom() {
         ClassroomDTO dto = new ClassroomDTO();
         Classroom classroom = new Classroom();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(classroom));

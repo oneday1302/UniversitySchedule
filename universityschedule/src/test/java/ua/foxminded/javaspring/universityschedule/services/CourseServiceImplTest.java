@@ -37,7 +37,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    void add_whenInputParamCourseDTO() {
+    void add_shouldAddCourseToDatabase() {
         CourseDTO dto = new CourseDTO();
         service.add(dto);
         Course course = new Course();
@@ -52,7 +52,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    void update_whenInputParamCourseDTO() {
+    void update_shouldUpdateCourse() {
         CourseDTO dto = new CourseDTO();
         Course course = new Course();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(course));

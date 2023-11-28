@@ -3,9 +3,7 @@ package ua.foxminded.javaspring.universityschedule.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -30,11 +28,11 @@ public class Teacher extends User {
         this.addRole(role);
     }
 
-    public void addCourse(List<Course> course) {
+    public void addCourses(Set<Course> courses) {
         if (courses == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
-        courses.addAll(course);
+        this.courses.addAll(courses);
     }
 
     public void clearCourse() {
@@ -46,5 +44,9 @@ public class Teacher extends User {
             throw new IllegalArgumentException("Param cannot be null.");
         }
         return courses.contains(course);
+    }
+
+    public boolean isAdmin() {
+        return hasRole(Role.ADMIN);
     }
 }

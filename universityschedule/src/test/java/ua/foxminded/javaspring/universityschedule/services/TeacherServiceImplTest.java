@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = ServiceTestConfig.class)
-@MockBean(CourseService.class)
 @MockBean(EmailService.class)
 public class TeacherServiceImplTest {
 
@@ -41,7 +40,7 @@ public class TeacherServiceImplTest {
     }
 
     @Test
-    void add_whenInputParamTeacherDTO() {
+    void add_shouldAddTeacherToDatabase() {
         TeacherDTO dto = new TeacherDTO();
         char[] password = {'1'};
         when(generator.generate()).thenReturn(password);
@@ -59,7 +58,7 @@ public class TeacherServiceImplTest {
     }
 
     @Test
-    void update_whenInputParamTeacherDTO() {
+    void update_shouldUpdateTeacher() {
         TeacherDTO dto = new TeacherDTO();
         Teacher teacher = new Teacher();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(teacher));

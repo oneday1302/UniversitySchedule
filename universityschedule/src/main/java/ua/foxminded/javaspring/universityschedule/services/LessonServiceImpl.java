@@ -9,7 +9,6 @@ import ua.foxminded.javaspring.universityschedule.entities.*;
 import ua.foxminded.javaspring.universityschedule.repositories.LessonRepository;
 import ua.foxminded.javaspring.universityschedule.utils.QPredicates;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,22 +17,17 @@ import java.util.List;
 public class LessonServiceImpl implements LessonService {
 
     private final LessonRepository repository;
-    private final CourseService courseService;
-    private final TeacherService teacherService;
-    private final GroupService groupService;
-    private final ClassroomService classroomService;
 
-    @Transactional
     @Override
     public void add(LessonDTO dto) {
         if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
         Lesson lesson = Lesson.builder()
-                              .course(courseService.findById(dto.getCourseId()))
-                              .teacher(teacherService.findById(dto.getTeacherId()))
-                              .group(groupService.findById(dto.getGroupId()))
-                              .classroom(classroomService.findById(dto.getClassroomId()))
+                              .course(dto.getCourse())
+                              .teacher(dto.getTeacher())
+                              .group(dto.getGroup())
+                              .classroom(dto.getClassroom())
                               .date(dto.getDate())
                               .startTime(dto.getStartTime())
                               .endTime(dto.getEndTime())
@@ -41,60 +35,30 @@ public class LessonServiceImpl implements LessonService {
         repository.save(lesson);
     }
 
-    @Transactional
     @Override
     public void update(LessonDTO dto) {
         if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
         Lesson lesson = findById(dto.getId());
-        lesson.setCourse(courseService.findById(dto.getCourseId()));
-        lesson.setTeacher(teacherService.findById(dto.getTeacherId()));
-        lesson.setGroup(groupService.findById(dto.getGroupId()));
-        lesson.setClassroom(classroomService.findById(dto.getClassroomId()));
+        lesson.setCourse(dto.getCourse());
+        lesson.setTeacher(dto.getTeacher());
+        lesson.setGroup(dto.getGroup());
+        lesson.setClassroom(dto.getClassroom());
         lesson.setDate(dto.getDate());
         lesson.setStartTime(dto.getStartTime());
         lesson.setEndTime(dto.getEndTime());
         repository.save(lesson);
     }
 
-    @Transactional
     @Override
     public List<Lesson> findByFilter(LessonDTO dto) {
         if (dto == null) {
             throw new IllegalArgumentException("Param cannot be null.");
         }
 
-        Course course = null;
-        if (dto.getCourseId() != 0) {
-            course = courseService.findById(dto.getCourseId());
-        }
-
-        Teacher teacher = null;
-        if (dto.getTeacherId() != 0) {
-            teacher = teacherService.findById(dto.getTeacherId());
-        }
-
-        Group group = null;
-        if (dto.getGroupId() != 0) {
-            group = groupService.findById(dto.getGroupId());
-        }
-
-        Classroom classroom = null;
-        if (dto.getClassroomId() != 0) {
-            classroom = classroomService.findById(dto.getClassroomId());
-        }
-
-        LocalDate from = null;
-        if (dto.getDateFrom() != null) {
-            from = dto.getDateFrom();
-        }
-
-        LocalDate to = null;
-        if (dto.getDateTo() != null) {
-            to = dto.getDateTo();
-        }
-
+        LocalDate from = dto.getDateFrom();
+        LocalDate to = dto.getDateTo();
         if (from == null && to == null) {
             LocalDate initial = LocalDate.now();
             from = initial.withDayOfMonth(1);
@@ -102,10 +66,10 @@ public class LessonServiceImpl implements LessonService {
         }
 
         Predicate predicate = QPredicates.builder()
-                                         .add(course, QLesson.lesson.course::eq)
-                                         .add(teacher, QLesson.lesson.teacher::eq)
-                                         .add(group, QLesson.lesson.group::eq)
-                                         .add(classroom, QLesson.lesson.classroom::eq)
+                                         .add(dto.getCourse(), QLesson.lesson.course::eq)
+                                         .add(dto.getTeacher(), QLesson.lesson.teacher::eq)
+                                         .add(dto.getGroup(), QLesson.lesson.group::eq)
+                                         .add(dto.getClassroom(), QLesson.lesson.classroom::eq)
                                          .add(from, QLesson.lesson.date::after)
                                          .add(to, QLesson.lesson.date::before)
                                          .buildAnd();

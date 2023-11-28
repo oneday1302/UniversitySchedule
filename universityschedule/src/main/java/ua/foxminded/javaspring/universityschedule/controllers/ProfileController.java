@@ -4,23 +4,32 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foxminded.javaspring.universityschedule.dto.PasswordDTO;
 import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
 import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
 import ua.foxminded.javaspring.universityschedule.entities.Teacher;
+import ua.foxminded.javaspring.universityschedule.entities.User;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.TeacherService;
+import ua.foxminded.javaspring.universityschedule.services.UserService;
 import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
+import ua.foxminded.javaspring.universityschedule.validation.UpdateAdminProfile;
+import ua.foxminded.javaspring.universityschedule.validation.UpdateUserProfile;
 
 @RequiredArgsConstructor
 @Controller
 public class ProfileController {
 
+    private final UserService userService;
     private final StudentService studentService;
     private final TeacherService teacherService;
     private final CourseService courseService;
@@ -41,38 +50,101 @@ public class ProfileController {
     @GetMapping("/profile/edit")
     public String editProfile(Model model, Authentication authentication) {
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
-        if (principal.getAuthorities().contains(Role.ADMIN)) {
-            Teacher teacher = principal.unwrap(Teacher.class);
-            model.addAttribute("user", teacher);
-            model.addAttribute("courses", courseService.getAll());
-        } else if (principal.getAuthorities().contains(Role.TEACHER)) {
-            Teacher teacher = principal.unwrap(Teacher.class);
-            model.addAttribute("user", teacher);
+        if (principal.getAuthorities().contains(Role.TEACHER)) {
+            if (principal.getAuthorities().contains(Role.ADMIN)) {
+                model.addAttribute("courses", courseService.getAll());
+            }
+            if (!model.containsAttribute("userDTO")) {
+                model.addAttribute("userDTO", new TeacherDTO(principal.unwrap(Teacher.class)));
+            }
         } else {
-            Student student = principal.unwrap(Student.class);
-            model.addAttribute("user", student);
+            if (!model.containsAttribute("userDTO")) {
+                model.addAttribute("userDTO", new StudentDTO(principal.unwrap(Student.class)));
+            }
         }
         return "/editProfile";
     }
 
     @PostMapping("/profile/edit")
-    public String postEditProfile(Authentication authentication, @ModelAttribute TeacherDTO dto) {
+    public String postEditProfile(Authentication authentication,
+                                  @ModelAttribute("userDTO") TeacherDTO dto,
+                                  RedirectAttributes attr) {
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        attr.addFlashAttribute("userDTO", dto);
         if (principal.getAuthorities().contains(Role.ADMIN)) {
-            Teacher teacher = principal.unwrap(Teacher.class);
-            dto.setId(teacher.getId());
-            dto.setAdmin(true);
-            teacherService.update(dto);
-        } else if (principal.getAuthorities().contains(Role.TEACHER)) {
+            return "redirect:/profile/editAdminProfile";
+        }
+        return "redirect:/profile/editUserProfile";
+    }
+
+    @GetMapping("/profile/editAdminProfile")
+    public String editAdminProfile(Authentication authentication,
+                                   @Validated(UpdateAdminProfile.class) @ModelAttribute("userDTO") TeacherDTO dto,
+                                   BindingResult result,
+                                   RedirectAttributes attr) {
+        if (result.hasErrors()) {
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.userDTO", result);
+            attr.addFlashAttribute("userDTO", dto);
+            return "redirect:/profile/edit";
+        }
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        Teacher teacher = principal.unwrap(Teacher.class);
+        dto.setId(teacher.getId());
+        dto.setAdmin(teacher.isAdmin());
+        teacherService.update(dto);
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/profile/editUserProfile")
+    public String editUserProfile(Authentication authentication,
+                                  @Validated(UpdateUserProfile.class) @ModelAttribute("userDTO") TeacherDTO dto,
+                                  BindingResult result,
+                                  RedirectAttributes attr) {
+        if (result.hasErrors()) {
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.userDTO", result);
+            attr.addFlashAttribute("userDTO", dto);
+            return "redirect:/profile/edit";
+        }
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        if (principal.getAuthorities().contains(Role.TEACHER)) {
             Teacher teacher = principal.unwrap(Teacher.class);
             dto.setId(teacher.getId());
             teacherService.update(dto);
         } else {
             Student student = principal.unwrap(Student.class);
-            StudentDTO studentDTO = new StudentDTO(dto);
-            studentDTO.setId(student.getId());
-            studentDTO.setGroupId(student.getGroup().getId());
-            studentService.update(studentDTO);
+            dto.setId(student.getId());
+            studentService.update(new StudentDTO(dto));
+        }
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/profile/editPassword")
+    public String editPassword(Model model) {
+        if (!model.containsAttribute("passwordDTO")) {
+            model.addAttribute("passwordDTO", new PasswordDTO());
+        }
+        return "/editPassword";
+    }
+
+    @PostMapping("/profile/editPassword")
+    public String postEditPassword(Authentication authentication,
+                                   @Validated(UpdateUserProfile.class) @ModelAttribute("passwordDTO") PasswordDTO dto,
+                                   BindingResult result,
+                                   RedirectAttributes attr) {
+        if (result.hasErrors()) {
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.passwordDTO", result);
+            attr.addFlashAttribute("passwordDTO", dto);
+            return "redirect:/profile/editPassword";
+        }
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        User user = principal.unwrap(User.class);
+        dto.setId(user.getId());
+        try {
+            userService.updatePassword(dto);
+        } catch (IllegalArgumentException e) {
+            attr.addFlashAttribute("error", true);
+            attr.addFlashAttribute("message", e.getMessage());
+            return "redirect:/profile/editPassword";
         }
         return "redirect:/profile";
     }

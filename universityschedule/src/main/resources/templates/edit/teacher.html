@@ -17,11 +17,11 @@
             crossorigin="anonymous">
     </script>
 </head>
-<body>
-<section style="background-color: #eee; height: 100vh;">
+<body style="background-color: #eee; height: 100%;">
+<section>
     <header th:insert="/menu :: menu"></header>
     <div class="container py-5">
-        <form th:action="@{'/editTeacher/' + ${teacher.getId}}" method="post">
+        <form th:action="@{'/editTeacher/' + *{id}}" th:object="${teacherDTO}" method="post">
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row">
@@ -29,7 +29,8 @@
                             <p class="mb-0">First Name</p>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="firstName" th:value="${teacher.getFirstName}">
+                            <input class="form-control" type="text" name="firstName" th:field="*{firstName}">
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
                         </div>
                     </div>
                     <hr>
@@ -38,7 +39,8 @@
                             <p class="mb-0">Last Name</p>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="lastName" th:value="${teacher.getLastName}">
+                            <input class="form-control" type="text" name="lastName" th:field="*{lastName}">
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
                         </div>
                     </div>
                     <hr>
@@ -49,7 +51,7 @@
                         <div class="col-sm-9">
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" name="isAdmin" th:checked="${teacher.hasRole('ADMIN')}"> Admin
+                                    <input class="form-check-input me-1" type="checkbox" th:field="*{admin}">Admin
                                 </li>
                             </ul>
                         </div>
@@ -65,11 +67,12 @@
                                     <input class="form-check-input me-1"
                                            type="checkbox"
                                            name="courses"
-                                           th:value=${course.getId}
+                                           th:value="${course.getId}"
                                            th:text="${course.getName}"
-                                           th:checked="${teacher.hasCourse(course)}">
+                                           th:checked="${teacherDTO.getCourses() != null} ? ${teacherDTO.getCourses().contains(course)}">
                                 </li>
                             </ul>
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('courses')}" th:errors="*{courses}"></div>
                         </div>
                     </div>
                 </div>

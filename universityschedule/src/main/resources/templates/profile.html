@@ -17,8 +17,8 @@
             crossorigin="anonymous">
     </script>
 </head>
-<body>
-<section style="background-color: #eee; height: 100vh;">
+<body style="background-color: #eee; height: 100%;">
+<section>
     <header th:insert="/menu :: menu"></header>
     <div class="container py-5">
         <div class="card mb-4">
@@ -28,7 +28,7 @@
                         <p class="mb-0">Full Name</p>
                     </div>
                     <div class="col-sm-9">
-                        <p class="text-muted mb-0" th:text="${user.getFirstName + ' ' + user.getLastName}"></p>
+                        <p class="text-muted mb-0" th:text="${user.getFullName}"></p>
                     </div>
                 </div>
                 <hr>
@@ -63,6 +63,7 @@
             </div>
         </div>
         <a href="/profile/edit" class="btn btn-primary">Edit Profile</a>
+        <a href="/profile/editPassword" class="btn btn-primary">Edit Password</a>
     </div>
 </section>
 </body>

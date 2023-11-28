@@ -9,7 +9,6 @@ import ua.foxminded.javaspring.universityschedule.entities.Teacher;
 import ua.foxminded.javaspring.universityschedule.repositories.TeacherRepository;
 import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
 
-import javax.transaction.Transactional;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +19,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final UserService userService;
     private final TeacherRepository repository;
-    private final CourseService courseService;
     private final PasswordEncoder encoder;
     private final EmailService emailService;
     private final PasswordGenerator passwordGenerator;
@@ -42,7 +40,7 @@ public class TeacherServiceImpl implements TeacherService {
                                  .lastName(dto.getLastName())
                                  .build();
         if (dto.getCourses() != null) {
-            teacher.addCourse(courseService.getAllByListId(dto.getCourses()));
+            teacher.addCourses(dto.getCourses());
         }
         if (dto.isAdmin()) {
             teacher.addRole(Role.ADMIN);
@@ -54,7 +52,6 @@ public class TeacherServiceImpl implements TeacherService {
         Arrays.fill(password, '\0');
     }
 
-    @Transactional
     @Override
     public void update(TeacherDTO dto) {
         if (dto == null) {
@@ -68,7 +65,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
         if (dto.getCourses() != null) {
             teacher.clearCourse();
-            teacher.addCourse(courseService.getAllByListId(dto.getCourses()));
+            teacher.addCourses(dto.getCourses());
         }
         repository.save(teacher);
     }

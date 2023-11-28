@@ -37,7 +37,7 @@ public class GroupServiceImplTest {
     }
 
     @Test
-    void add_whenInputParamGroupDTO() {
+    void add_shouldAddGroupToDatabase() {
         GroupDTO dto = new GroupDTO();
         service.add(dto);
         Group group = new Group();
@@ -52,7 +52,7 @@ public class GroupServiceImplTest {
     }
 
     @Test
-    void update_whenInputParamGroupDTO() {
+    void update_shouldUpdateGroup() {
         GroupDTO dto = new GroupDTO();
         Group group = new Group();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(group));

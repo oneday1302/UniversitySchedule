@@ -8,6 +8,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Group;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
@@ -50,16 +51,36 @@ public class StudentControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/addStudent"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/add/student"))
-                .andExpect(model().attributeExists("groups"));
+                .andExpect(model().attributeExists("groups"))
+                .andExpect(model().attributeExists("studentDTO"));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void saveStudent_shouldRedirectToAddStudentView_whenRequestParametersNotValid() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/addStudent")
+                                          .flashAttr("studentDTO", new StudentDTO())
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/addStudent"));
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void saveStudent_shouldRedirectToHomeView() throws Exception {
+        StudentDTO dto = new StudentDTO();
+        dto.setId(0);
+        dto.setUsername("test");
+        dto.setFirstName("test");
+        dto.setLastName("test");
+        dto.setEmail("test@gmail.com");
+        dto.setGroup(new Group());
+
         mvc.perform(MockMvcRequestBuilders.post("/addStudent")
-                                          .param("groupId", "1")
+                                          .flashAttr("studentDTO", dto)
                                           .with(csrf()))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/home"));
     }
 
     @Test
@@ -102,22 +123,40 @@ public class StudentControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/editStudent/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/edit/student"))
-                .andExpect(model().attributeExists("student"))
+                .andExpect(model().attributeExists("studentDTO"))
                 .andExpect(model().attributeExists("groups"));
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void postEditStudent_shouldRedirectToStudentsView() throws Exception {
+    public void postEditStudent_shouldRedirectToEditStudentView_whenRequestParametersNotValid() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/editStudent/{id}", 1L)
+                                          .flashAttr("studentDTO", new StudentDTO())
                                           .with(csrf()))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/editStudent/" + 1L));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void postEditStudent_shouldRedirectToStudentsView() throws Exception {
+        StudentDTO dto = new StudentDTO();
+        dto.setId(1);
+        dto.setFirstName("test");
+        dto.setLastName("test");
+        dto.setGroup(new Group());
+
+        mvc.perform(MockMvcRequestBuilders.post("/editStudent/{id}", 1L)
+                                          .flashAttr("studentDTO", dto)
+                                          .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/students"));
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void deleteStudent_shouldRedirectToStudentsView() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/deleteStudent/{id}", 1L)
+        mvc.perform(MockMvcRequestBuilders.delete("/deleteStudent/{id}", 1L)
                                           .with(csrf()))
                 .andExpect(status().is3xxRedirection());
     }
