@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import ua.foxminded.javaspring.universityschedule.configs.ServiceTestConfig;
 import ua.foxminded.javaspring.universityschedule.dto.CourseDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Course;

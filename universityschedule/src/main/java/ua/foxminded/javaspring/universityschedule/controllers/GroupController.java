@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.GroupDTO;
+import ua.foxminded.javaspring.universityschedule.mapper.GroupMapper;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
 import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
@@ -20,6 +21,7 @@ import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
 public class GroupController {
 
     private final GroupService groupService;
+    private final GroupMapper mapper;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addGroup")
@@ -54,7 +56,7 @@ public class GroupController {
     @GetMapping("/editGroup/{id}")
     public String editGroup(@PathVariable(value = "id") long id, Model model) {
         if (!model.containsAttribute("groupDTO")) {
-            model.addAttribute("groupDTO", new GroupDTO(groupService.findById(id)));
+            model.addAttribute("groupDTO", mapper.groupToDTO(groupService.findById(id)));
         }
         return "/edit/group";
     }

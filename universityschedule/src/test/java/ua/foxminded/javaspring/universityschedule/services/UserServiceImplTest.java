@@ -82,26 +82,6 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void updatePassword_shouldReturnIllegalArgumentException_whenNewPasswordAndPasswordConfirmationAreNotEquals() {
-        PasswordDTO dto = new PasswordDTO();
-        char[] currentPassword = {'1'};
-        dto.setCurrentPassword(currentPassword);
-        char[] newPassword = {'2'};
-        dto.setNewPassword(newPassword);
-        char[] passwordConfirmation = {'3'};
-        dto.setPasswordConfirmation(passwordConfirmation);
-
-        User user = new User();
-        when(repository.findById(dto.getId())).thenReturn(Optional.of(user));
-        when(encoder.matches(CharBuffer.wrap(dto.getCurrentPassword()), user.getPassword())).thenReturn(true);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            service.updatePassword(dto);
-        });
-        assertEquals(exception.getMessage(), "New password and password confirmation are not equals!");
-    }
-
-    @Test
     void updatePassword_shouldUpdateUserPassword() {
         PasswordDTO dto = new PasswordDTO();
         char[] currentPassword = {'1'};

@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.PasswordDTO;
-import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
 import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
 import ua.foxminded.javaspring.universityschedule.entities.Teacher;
 import ua.foxminded.javaspring.universityschedule.entities.User;
+import ua.foxminded.javaspring.universityschedule.mapper.StudentMapper;
+import ua.foxminded.javaspring.universityschedule.mapper.TeacherMapper;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.TeacherService;
@@ -24,6 +25,8 @@ import ua.foxminded.javaspring.universityschedule.services.UserService;
 import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateAdminProfile;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateUserProfile;
+
+import java.nio.CharBuffer;
 
 @RequiredArgsConstructor
 @Controller
@@ -33,6 +36,9 @@ public class ProfileController {
     private final StudentService studentService;
     private final TeacherService teacherService;
     private final CourseService courseService;
+    private final TeacherMapper teacherMapper;
+    private final StudentMapper studentMapper;
+    private static final String errorMessage = "Current password and old password are not matches!";
 
     @GetMapping("/profile")
     public String profile(Model model, Authentication authentication) {
@@ -55,11 +61,11 @@ public class ProfileController {
                 model.addAttribute("courses", courseService.getAll());
             }
             if (!model.containsAttribute("userDTO")) {
-                model.addAttribute("userDTO", new TeacherDTO(principal.unwrap(Teacher.class)));
+                model.addAttribute("userDTO", teacherMapper.teacherToDTO(principal.unwrap(Teacher.class)));
             }
         } else {
             if (!model.containsAttribute("userDTO")) {
-                model.addAttribute("userDTO", new StudentDTO(principal.unwrap(Student.class)));
+                model.addAttribute("userDTO", studentMapper.studentToDTO(principal.unwrap(Student.class)));
             }
         }
         return "/editProfile";
@@ -113,7 +119,7 @@ public class ProfileController {
         } else {
             Student student = principal.unwrap(Student.class);
             dto.setId(student.getId());
-            studentService.update(new StudentDTO(dto));
+            studentService.update(dto);
         }
         return "redirect:/profile";
     }
@@ -138,14 +144,13 @@ public class ProfileController {
         }
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         User user = principal.unwrap(User.class);
-        dto.setId(user.getId());
-        try {
-            userService.updatePassword(dto);
-        } catch (IllegalArgumentException e) {
+        if (!userService.passwordMatches(CharBuffer.wrap(dto.getCurrentPassword()), user.getPassword())) {
             attr.addFlashAttribute("error", true);
-            attr.addFlashAttribute("message", e.getMessage());
+            attr.addFlashAttribute("message", errorMessage);
             return "redirect:/profile/editPassword";
         }
+        dto.setId(user.getId());
+        userService.updatePassword(dto);
         return "redirect:/profile";
     }
 }

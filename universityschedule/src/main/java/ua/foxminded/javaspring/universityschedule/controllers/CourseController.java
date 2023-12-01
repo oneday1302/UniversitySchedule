@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.CourseDTO;
+import ua.foxminded.javaspring.universityschedule.mapper.CourseMapper;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
@@ -20,6 +21,7 @@ import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseMapper mapper;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addCourse")
@@ -54,7 +56,7 @@ public class CourseController {
     @GetMapping("/editCourse/{id}")
     public String editCourse(@PathVariable(value = "id") long id, Model model) {
         if (!model.containsAttribute("courseDTO")) {
-            model.addAttribute("courseDTO", new CourseDTO(courseService.findById(id)));
+            model.addAttribute("courseDTO", mapper.courseToDTO(courseService.findById(id)));
         }
         return "/edit/course";
     }

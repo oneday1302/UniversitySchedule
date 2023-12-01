@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Group;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
+import ua.foxminded.javaspring.universityschedule.mapper.StudentMapperImpl;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 @WebMvcTest(StudentController.class)
+@Import(StudentMapperImpl.class)
 @MockBean(UserService.class)
 @MockBean(GroupService.class)
 public class StudentControllerTest {

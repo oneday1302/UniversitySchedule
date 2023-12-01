@@ -63,15 +63,4 @@ public class LessonDTO {
     @CanBeNull(groups = FilterForLesson.class)
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateTo;
-
-    public LessonDTO(Lesson lesson) {
-        this.id = lesson.getId();
-        this.course = lesson.getCourse();
-        this.teacher = lesson.getTeacher();
-        this.group = lesson.getGroup();
-        this.classroom = lesson.getClassroom();
-        this.date = lesson.getDate();
-        this.startTime = lesson.getStartTime();
-        this.endTime = lesson.getEndTime();
-    }
 }

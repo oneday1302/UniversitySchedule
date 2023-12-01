@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
+import ua.foxminded.javaspring.universityschedule.mapper.StudentMapper;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
@@ -24,6 +25,7 @@ public class StudentController {
     private final UserService userService;
     private final StudentService studentService;
     private final GroupService groupService;
+    private final StudentMapper mapper;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addStudent")
@@ -59,7 +61,7 @@ public class StudentController {
     @GetMapping("/editStudent/{id}")
     public String editStudent(@PathVariable(value = "id") long id, Model model) {
         if (!model.containsAttribute("studentDTO")) {
-            model.addAttribute("studentDTO", new StudentDTO(studentService.findById(id)));
+            model.addAttribute("studentDTO", mapper.studentToDTO(studentService.findById(id)));
         }
         model.addAttribute("groups", groupService.getAll());
         return "/edit/student";

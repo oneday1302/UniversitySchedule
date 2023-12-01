@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.ClassroomDTO;
+import ua.foxminded.javaspring.universityschedule.mapper.ClassroomMapper;
 import ua.foxminded.javaspring.universityschedule.services.ClassroomService;
 import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
@@ -20,6 +21,7 @@ import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
 public class ClassroomController {
 
     private final ClassroomService classroomService;
+    private final ClassroomMapper mapper;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addClassroom")
@@ -54,7 +56,7 @@ public class ClassroomController {
     @GetMapping("/editClassroom/{id}")
     public String editClassroom(@PathVariable(value = "id") long id, Model model) {
         if (!model.containsAttribute("classroomDTO")) {
-            model.addAttribute("classroomDTO", new ClassroomDTO(classroomService.findById(id)));
+            model.addAttribute("classroomDTO", mapper.classroomToDTO(classroomService.findById(id)));
         }
         return "/edit/classroom";
     }

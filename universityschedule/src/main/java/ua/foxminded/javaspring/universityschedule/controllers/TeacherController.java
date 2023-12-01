@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
+import ua.foxminded.javaspring.universityschedule.mapper.TeacherMapper;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 import ua.foxminded.javaspring.universityschedule.services.TeacherService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
@@ -24,6 +25,7 @@ public class TeacherController {
     private final UserService userService;
     private final TeacherService teacherService;
     private final CourseService courseService;
+    private final TeacherMapper mapper;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addTeacher")
@@ -59,7 +61,7 @@ public class TeacherController {
     @GetMapping("/editTeacher/{id}")
     public String editTeacher(@PathVariable(value = "id") long id, Model model) {
         if (!model.containsAttribute("teacherDTO")) {
-            model.addAttribute("teacherDTO", new TeacherDTO(teacherService.findById(id)));
+            model.addAttribute("teacherDTO", mapper.teacherToDTO(teacherService.findById(id)));
         }
         model.addAttribute("courses", courseService.getAll());
         return "/edit/teacher";

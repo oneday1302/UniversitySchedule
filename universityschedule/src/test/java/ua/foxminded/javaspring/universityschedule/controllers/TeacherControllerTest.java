@@ -4,12 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Teacher;
+import ua.foxminded.javaspring.universityschedule.mapper.TeacherMapperImpl;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 import ua.foxminded.javaspring.universityschedule.services.TeacherService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
@@ -22,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TeacherController.class)
+@Import(TeacherMapperImpl.class)
 @MockBean(UserService.class)
 @MockBean(CourseService.class)
 public class TeacherControllerTest {

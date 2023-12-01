@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
+import ua.foxminded.javaspring.universityschedule.dto.UserDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
 import ua.foxminded.javaspring.universityschedule.repositories.StudentRepository;
 import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
@@ -55,6 +56,15 @@ public class StudentServiceImpl implements StudentService {
         if (dto.getGroup() != null) {
             student.setGroup(dto.getGroup());
         }
+        repository.save(student);
+    }
+
+    @Override
+    public void update(UserDTO dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("Param cannot be null.");
+        }
+        Student student = (Student) userService.editUserData(findById(dto.getId()), dto);
         repository.save(student);
     }
 

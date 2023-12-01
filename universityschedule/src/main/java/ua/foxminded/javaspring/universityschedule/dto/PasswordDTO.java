@@ -5,7 +5,7 @@ import ua.foxminded.javaspring.universityschedule.validation.annotations.NotEmpt
 import ua.foxminded.javaspring.universityschedule.validation.UpdateUserProfile;
 import ua.foxminded.javaspring.universityschedule.validation.annotations.Zero;
 
-import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 
 @Data
 public class PasswordDTO {
@@ -21,4 +21,10 @@ public class PasswordDTO {
 
     @NotEmpty(groups = UpdateUserProfile.class, message = "Password confirmation must be not empty")
     private char[] passwordConfirmation;
+
+    public void invalidate() {
+        Arrays.fill(currentPassword, '\0');
+        Arrays.fill(newPassword, '\0');
+        Arrays.fill(passwordConfirmation, '\0');
+    }
 }

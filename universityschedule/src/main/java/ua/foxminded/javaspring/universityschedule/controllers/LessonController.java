@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.LessonDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Lesson;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
+import ua.foxminded.javaspring.universityschedule.mapper.LessonMapper;
 import ua.foxminded.javaspring.universityschedule.services.*;
 import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
@@ -31,6 +32,7 @@ public class LessonController {
     private final TeacherService teacherService;
     private final GroupService groupService;
     private final ClassroomService classroomService;
+    private final LessonMapper mapper;
 
     @GetMapping("/getEvents")
     @ResponseBody
@@ -85,9 +87,8 @@ public class LessonController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/editLesson/{id}")
     public String editLesson(@PathVariable(value = "id") long id, Model model) {
-        Lesson lesson = lessonService.findById(id);
         if (!model.containsAttribute("lessonDTO")) {
-            model.addAttribute("lessonDTO", new LessonDTO(lesson));
+            model.addAttribute("lessonDTO", mapper.lessonToDTO(lessonService.findById(id)));
         }
         model.addAttribute("courses", courseService.getAll());
         model.addAttribute("teachers", teacherService.getAll());

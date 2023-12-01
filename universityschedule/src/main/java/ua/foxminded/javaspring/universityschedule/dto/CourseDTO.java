@@ -2,14 +2,12 @@ package ua.foxminded.javaspring.universityschedule.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.foxminded.javaspring.universityschedule.entities.Course;
 import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.annotations.Zero;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 
 @NoArgsConstructor
 @Data
@@ -21,9 +19,4 @@ public class CourseDTO {
 
     @NotBlank(groups = {CreateEntity.class, UpdateEntity.class}, message = "Name must be not blank!")
     private String name;
-
-    public CourseDTO(Course course) {
-        this.id = course.getId();
-        this.name = course.getName();
-    }
 }
