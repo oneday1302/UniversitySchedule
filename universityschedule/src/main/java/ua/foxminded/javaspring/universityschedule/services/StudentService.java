@@ -12,8 +12,6 @@ public interface StudentService {
 
     void update(StudentDTO dto);
 
-    void update(UserDTO dto);
-
     Student findById(long id);
 
     List<Student> getAll();

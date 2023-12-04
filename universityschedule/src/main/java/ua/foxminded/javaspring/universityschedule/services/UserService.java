@@ -10,8 +10,6 @@ public interface UserService {
 
     void updatePassword(PasswordDTO dto);
 
-    boolean passwordMatches(CharSequence rawPassword, String encodedPassword);
-
     User findById(long id);
 
     void removeById(long id);

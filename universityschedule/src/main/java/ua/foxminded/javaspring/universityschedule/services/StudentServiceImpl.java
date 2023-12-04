@@ -60,15 +60,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void update(UserDTO dto) {
-        if (dto == null) {
-            throw new IllegalArgumentException("Param cannot be null.");
-        }
-        Student student = (Student) userService.editUserData(findById(dto.getId()), dto);
-        repository.save(student);
-    }
-
-    @Override
     public Student findById(long id) {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Entity no found."));
     }

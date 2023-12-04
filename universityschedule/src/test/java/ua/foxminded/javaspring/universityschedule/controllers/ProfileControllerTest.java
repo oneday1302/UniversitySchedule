@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,10 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(StudentService.class)
 @MockBean(TeacherService.class)
 @MockBean(CourseService.class)
+@MockBean(UserService.class)
 public class ProfileControllerTest {
 
     @MockBean
-    private UserService userService;
+    private PasswordEncoder encoder;
 
     @Autowired
     private TeacherMapper teacherMapper;
@@ -213,7 +215,7 @@ public class ProfileControllerTest {
         dto.setPasswordConfirmation("test".toCharArray());
 
         Teacher teacher = new Teacher();
-        when(userService.passwordMatches(CharBuffer.wrap(dto.getCurrentPassword()), teacher.getPassword())).thenReturn(true);
+        when(encoder.matches(CharBuffer.wrap(dto.getCurrentPassword()), teacher.getPassword())).thenReturn(true);
         mvc.perform(MockMvcRequestBuilders.post("/profile/editPassword")
                                           .with(user(new CustomUserDetails(teacher)))
                                           .flashAttr("passwordDTO", dto)

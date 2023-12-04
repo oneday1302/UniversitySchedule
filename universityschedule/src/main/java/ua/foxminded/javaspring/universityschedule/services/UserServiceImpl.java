@@ -48,8 +48,7 @@ public class UserServiceImpl implements UserService {
         dto.invalidate();
     }
 
-    @Override
-    public boolean passwordMatches(CharSequence rawPassword, String encodedPassword) {
+    private boolean passwordMatches(CharSequence rawPassword, String encodedPassword) {
         return encoder.matches(rawPassword, encodedPassword);
     }
 
