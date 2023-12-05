@@ -19,12 +19,8 @@ public class PasswordDTO {
     @NotEmpty(groups = UpdateUserProfile.class, message = "New password must be not empty")
     private char[] newPassword;
 
-    @NotEmpty(groups = UpdateUserProfile.class, message = "Password confirmation must be not empty")
-    private char[] passwordConfirmation;
-
     public void invalidate() {
         Arrays.fill(currentPassword, '\0');
-        Arrays.fill(newPassword, '\0');
-        Arrays.fill(passwordConfirmation, '\0');
+        Arrays.fill(newPassword, '\0');;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.universityschedule.dto.PasswordDTO;
 import ua.foxminded.javaspring.universityschedule.dto.UserDTO;
 import ua.foxminded.javaspring.universityschedule.entities.User;
+import ua.foxminded.javaspring.universityschedule.exceptions.PasswordNotMatch;
 import ua.foxminded.javaspring.universityschedule.repositories.UserRepository;
 
 import java.nio.CharBuffer;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = findById(dto.getId());
         if (!passwordMatches(CharBuffer.wrap(dto.getCurrentPassword()), user.getPassword())) {
-            throw new IllegalArgumentException("Current password and old password are not matches!");
+            throw new PasswordNotMatch("Current password and old password are not matches!");
         }
         user.setPassword(encoder.encode(CharBuffer.wrap(dto.getNewPassword())));
         repository.save(user);

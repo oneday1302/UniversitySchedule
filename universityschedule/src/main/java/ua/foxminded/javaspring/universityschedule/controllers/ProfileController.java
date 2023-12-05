@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.universityschedule.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,8 +38,6 @@ public class ProfileController {
     private final CourseService courseService;
     private final TeacherMapper teacherMapper;
     private final StudentMapper studentMapper;
-    private final PasswordEncoder encoder;
-    private static final String errorMessage = "Current password and old password are not matches!";
 
     @GetMapping("/profile")
     public String profile(Model model, Authentication authentication) {
@@ -146,11 +143,6 @@ public class ProfileController {
         }
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         User user = principal.unwrap(User.class);
-        if (!encoder.matches(CharBuffer.wrap(dto.getCurrentPassword()), user.getPassword())) {
-            attr.addFlashAttribute("error", true);
-            attr.addFlashAttribute("message", errorMessage);
-            return "redirect:/profile/editPassword";
-        }
         dto.setId(user.getId());
         userService.updatePassword(dto);
         return "redirect:/profile";

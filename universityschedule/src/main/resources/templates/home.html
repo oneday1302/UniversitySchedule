@@ -55,8 +55,11 @@
                     </div>
                     <div class="col-sm-9">
                         <select class="form-control col-4 mb-4" name="select_teacher" id="select_teacher">
-                            <option th:value="0" th:text="All" selected>
-                            <option th:each="teacher : ${teachers}" th:value="${teacher.getId}" th:text="${teacher.getFullName}">
+                            <option th:value="0" th:text="All" th:selected="${teacherSelected}">
+                            <option th:each="teacher : ${teachers}"
+                                    th:value="${teacher.getId}"
+                                    th:text="${teacher.getFullName}"
+                                    th:selected="(${teacher.getId} == ${teacherId})">
                         </select>
                     </div>
                 </div>
@@ -67,8 +70,11 @@
                     </div>
                     <div class="col-sm-9">
                         <select class="form-control col-4 mb-4" name="select_group" id="select_group">
-                            <option th:value="0" th:text="All" selected>
-                            <option th:each="group : ${groups}" th:value="${group.getId}" th:text="${group.getName}">
+                            <option th:value="0" th:text="All" th:selected="${groupSelected}">
+                            <option th:each="group : ${groups}"
+                                    th:value="${group.getId}"
+                                    th:text="${group.getName}"
+                                    th:selected="(${group.getId} == ${groupId})">
                         </select>
                     </div>
                 </div>
