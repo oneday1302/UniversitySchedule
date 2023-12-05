@@ -4,7 +4,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.universityschedule.exceptions.PasswordNotMatch;
+import ua.foxminded.javaspring.universityschedule.exceptions.PasswordNotMatchException;
 
 import java.sql.SQLException;
 
@@ -17,8 +17,8 @@ public class ExceptionController {
         return "/errorPage";
     }
 
-    @ExceptionHandler(PasswordNotMatch.class)
-    public String passwordNotMatch(PasswordNotMatch e, RedirectAttributes attr) {
+    @ExceptionHandler(PasswordNotMatchException.class)
+    public String passwordNotMatch(PasswordNotMatchException e, RedirectAttributes attr) {
         attr.addFlashAttribute("error", true);
         attr.addFlashAttribute("message", e.getMessage());
         return "redirect:/profile/editPassword";
