@@ -8,6 +8,7 @@ import ua.foxminded.javaspring.universityschedule.configs.ServiceTestConfig;
 import ua.foxminded.javaspring.universityschedule.dto.PasswordDTO;
 import ua.foxminded.javaspring.universityschedule.dto.UserDTO;
 import ua.foxminded.javaspring.universityschedule.entities.User;
+import ua.foxminded.javaspring.universityschedule.exceptions.PasswordNotMatchException;
 import ua.foxminded.javaspring.universityschedule.repositories.UserRepository;
 
 import java.nio.CharBuffer;
@@ -75,7 +76,7 @@ public class UserServiceImplTest {
         when(repository.findById(dto.getId())).thenReturn(Optional.of(user));
         when(encoder.matches(CharBuffer.wrap(dto.getCurrentPassword()), user.getPassword())).thenReturn(false);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(PasswordNotMatchException.class, () -> {
             service.updatePassword(dto);
         });
         assertEquals(exception.getMessage(), "Current password and old password are not matches!");
@@ -88,8 +89,6 @@ public class UserServiceImplTest {
         dto.setCurrentPassword(currentPassword);
         char[] newPassword = {'2'};
         dto.setNewPassword(newPassword);
-        char[] passwordConfirmation = {'2'};
-        dto.setPasswordConfirmation(passwordConfirmation);
 
         User user = new User();
         when(repository.findById(dto.getId())).thenReturn(Optional.of(user));

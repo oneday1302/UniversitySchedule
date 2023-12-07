@@ -143,7 +143,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void editAdminProfile_shouldRedirectToProfileView() throws Exception {
+    public void editAdminProfile_shouldRedirectToLoginView() throws Exception {
         Teacher teacher = Teacher.builder()
                                  .firstName("test")
                                  .lastName("test")
@@ -155,7 +155,7 @@ public class ProfileControllerTest {
                                           .with(user(new CustomUserDetails(teacher)))
                                           .flashAttr("userDTO", teacherMapper.teacherToDTO(teacher)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/profile"));
+                .andExpect(view().name("redirect:/login"));
     }
 
     @Test
@@ -171,7 +171,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void editUserProfile_shouldRedirectToProfileView() throws Exception {
+    public void editUserProfile_shouldRedirectToLoginView() throws Exception {
         Teacher teacher = Teacher.builder()
                                  .firstName("test")
                                  .lastName("test")
@@ -185,7 +185,7 @@ public class ProfileControllerTest {
                                           .with(user(new CustomUserDetails(teacher)))
                                           .flashAttr("userDTO", dto))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/profile"));
+                .andExpect(view().name("redirect:/login"));
     }
 
     @Test
@@ -208,11 +208,10 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void postEditPassword_shouldRedirectToProfileView() throws Exception {
+    public void postEditPassword_shouldRedirectToLoginView() throws Exception {
         PasswordDTO dto = new PasswordDTO();
         dto.setCurrentPassword("test".toCharArray());
         dto.setNewPassword("test".toCharArray());
-        dto.setPasswordConfirmation("test".toCharArray());
 
         Teacher teacher = new Teacher();
         when(encoder.matches(CharBuffer.wrap(dto.getCurrentPassword()), teacher.getPassword())).thenReturn(true);
@@ -221,6 +220,6 @@ public class ProfileControllerTest {
                                           .flashAttr("passwordDTO", dto)
                                           .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/profile"));
+                .andExpect(view().name("redirect:/login"));
     }
 }
