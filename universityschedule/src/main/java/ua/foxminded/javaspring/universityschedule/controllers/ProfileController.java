@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.universityschedule.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +27,8 @@ import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateAdminProfile;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateUserProfile;
 
-import java.nio.CharBuffer;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @Controller
@@ -86,25 +88,32 @@ public class ProfileController {
     public String editAdminProfile(Authentication authentication,
                                    @Validated(UpdateAdminProfile.class) @ModelAttribute("userDTO") TeacherDTO dto,
                                    BindingResult result,
-                                   RedirectAttributes attr) {
+                                   RedirectAttributes attr,
+                                   HttpServletRequest request,
+                                   HttpServletResponse response) {
         if (result.hasErrors()) {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.userDTO", result);
             attr.addFlashAttribute("userDTO", dto);
             return "redirect:/profile/edit";
         }
+
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         Teacher teacher = principal.unwrap(Teacher.class);
         dto.setId(teacher.getId());
         dto.setAdmin(teacher.isAdmin());
         teacherService.update(dto);
-        return "redirect:/profile";
+
+        new SecurityContextLogoutHandler().logout(request, response, authentication);
+        return "redirect:/login";
     }
 
     @GetMapping("/profile/editUserProfile")
     public String editUserProfile(Authentication authentication,
                                   @Validated(UpdateUserProfile.class) @ModelAttribute("userDTO") TeacherDTO dto,
                                   BindingResult result,
-                                  RedirectAttributes attr) {
+                                  RedirectAttributes attr,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) {
         if (result.hasErrors()) {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.userDTO", result);
             attr.addFlashAttribute("userDTO", dto);
@@ -120,7 +129,9 @@ public class ProfileController {
             dto.setId(student.getId());
             studentService.update(studentMapper.teacherDTOToStudentDTO(dto));
         }
-        return "redirect:/profile";
+
+        new SecurityContextLogoutHandler().logout(request, response, authentication);
+        return "redirect:/login";
     }
 
     @GetMapping("/profile/editPassword")
@@ -135,7 +146,9 @@ public class ProfileController {
     public String postEditPassword(Authentication authentication,
                                    @Validated(UpdateUserProfile.class) @ModelAttribute("passwordDTO") PasswordDTO dto,
                                    BindingResult result,
-                                   RedirectAttributes attr) {
+                                   RedirectAttributes attr,
+                                   HttpServletRequest request,
+                                   HttpServletResponse response) {
         if (result.hasErrors()) {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.passwordDTO", result);
             attr.addFlashAttribute("passwordDTO", dto);
@@ -145,6 +158,8 @@ public class ProfileController {
         User user = principal.unwrap(User.class);
         dto.setId(user.getId());
         userService.updatePassword(dto);
-        return "redirect:/profile";
+
+        new SecurityContextLogoutHandler().logout(request, response, authentication);
+        return "redirect:/login";
     }
 }

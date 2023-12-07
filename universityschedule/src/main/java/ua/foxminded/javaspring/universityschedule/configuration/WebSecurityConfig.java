@@ -23,7 +23,7 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin().loginPage("/login").successHandler(authenticationSuccessHandler).failureUrl("/login_error").permitAll()
                 .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login")
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/login").permitAll()
                 .and()
                 .userDetailsService(userDetailsService).httpBasic()
                 .and()
