@@ -1,30 +1,9 @@
 insert into university.users ("username", "password", "email", "first_name", "last_name")
-values ('admin', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Vladyslav', 'Kovalchuk'),
-	   ('teacher', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Emily', 'Smith'),
-	   ('MusicLover45', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Michael', 'Jones'),
-	   ('NatureExplorer77', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Emma', 'Taylor'),
-	   ('FitnessFanatic99', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Joshua', 'Williams'),
-	   ('Bookworm123', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Madison', 'Brown'),
-	   ('AdventureSeeker55', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Matthew', 'Davies'),
-	   ('FoodieDelight', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Olivia', 'Evans'),
-	   ('TravelBug22', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Ethan', 'Wilson'),
-	   ('GamingGuru88', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Hannah', 'Thomas');
+values ('admin', '$2a$12$kHfXTrPJXclANCF0Yhu3Xe9rNManZibWkCC8A1z1a1dkyQ70CluQq', 'maclarenhem@gmail.com', 'Vladyslav', 'Kovalchuk');
 
 insert into university.users_roles ("user_id", "role")
-values (1, 'TEACHER'),
-	   (1, 'ADMIN'),
-	   (2, 'TEACHER'),
-	   (3, 'TEACHER'),
-	   (4, 'TEACHER'),
-	   (5, 'TEACHER'),
-	   (6, 'TEACHER'),
-	   (7, 'TEACHER'),
-	   (8, 'TEACHER'),
-	   (9, 'TEACHER'),
-	   (10, 'TEACHER');
+values (1, 'TEACHER'), (1, 'ADMIN');
 
-insert into university.teachers ("id")
-values (1), (2), (3), (4), (5), (6), (7), (8) ,(9), (10);
+insert into university.teachers ("id") values (1);
 
-insert into university.teachers_courses ("teacher_id", "course_id")
-values (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10);
+insert into university.teachers_courses ("teacher_id", "course_id") values (1, 1);

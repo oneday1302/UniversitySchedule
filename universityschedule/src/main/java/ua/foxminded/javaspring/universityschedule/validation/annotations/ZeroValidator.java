@@ -1,7 +1,7 @@
 package ua.foxminded.javaspring.universityschedule.validation.annotations;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class ZeroValidator implements ConstraintValidator<Zero, Long> {
 

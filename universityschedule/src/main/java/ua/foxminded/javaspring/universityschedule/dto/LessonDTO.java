@@ -1,5 +1,9 @@
 package ua.foxminded.javaspring.universityschedule.dto;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,7 +14,6 @@ import ua.foxminded.javaspring.universityschedule.validation.FilterForLesson;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.annotations.Zero;
 
-import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

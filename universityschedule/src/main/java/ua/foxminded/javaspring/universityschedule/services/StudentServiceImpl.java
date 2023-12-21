@@ -3,8 +3,8 @@ package ua.foxminded.javaspring.universityschedule.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.foxminded.javaspring.universityschedule.dto.StudentDTO;
-import ua.foxminded.javaspring.universityschedule.dto.UserDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Student;
 import ua.foxminded.javaspring.universityschedule.repositories.StudentRepository;
 import ua.foxminded.javaspring.universityschedule.utils.PasswordGenerator;
@@ -25,6 +25,7 @@ public class StudentServiceImpl implements StudentService {
 
     private static final String emailBodyFormat = "username: %s| password: %s";
 
+    @Transactional
     @Override
     public void add(StudentDTO dto) {
         if (dto == null) {

@@ -11,7 +11,7 @@
 </head>
 <body style="background-color: #eee; height: 100%;">
     <section>
-        <header th:insert="/menu :: menu"></header>
+        <header th:insert="~{/menu :: menu}"></header>
         <div class="alert alert-warning" role="alert">
             <h4 class="alert-heading">Opps.. Sorry about this.</h4>
             <p th:utext="${errorMessage}"></p>

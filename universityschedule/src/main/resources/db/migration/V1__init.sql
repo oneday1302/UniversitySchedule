@@ -33,7 +33,7 @@ create table courses
 create table teachers_courses
 (
 	teacher_id integer not null references teachers (id) on delete cascade on update cascade,
-	course_id integer not null references courses (id) on delete cascade on update cascade,
+	course_id integer not null references courses (id),
 	constraint teachers_courses_pkey primary key (teacher_id, course_id)
 );
 

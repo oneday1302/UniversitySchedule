@@ -6,8 +6,8 @@ import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.annotations.Zero;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 @NoArgsConstructor
 @Data

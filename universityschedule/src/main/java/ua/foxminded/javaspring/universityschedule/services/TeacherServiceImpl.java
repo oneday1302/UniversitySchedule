@@ -3,6 +3,7 @@ package ua.foxminded.javaspring.universityschedule.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
 import ua.foxminded.javaspring.universityschedule.entities.Role;
 import ua.foxminded.javaspring.universityschedule.entities.Teacher;
@@ -25,6 +26,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     private static final String emailBodyFormat = "username: %s| password: %s";
 
+    @Transactional
     @Override
     public void add(TeacherDTO dto) {
         if (dto == null) {

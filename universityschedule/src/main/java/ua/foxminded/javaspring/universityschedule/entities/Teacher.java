@@ -1,8 +1,8 @@
 package ua.foxminded.javaspring.universityschedule.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "teachers", schema = "university")
 public class Teacher extends User {
 
-    @ManyToMany(cascade = { CascadeType.MERGE })
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name = "teachers_courses", schema = "university", joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"))
     Set<Course> courses = new HashSet<>();
 

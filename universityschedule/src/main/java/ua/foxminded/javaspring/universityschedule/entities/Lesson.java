@@ -1,9 +1,9 @@
 package ua.foxminded.javaspring.universityschedule.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
 import ua.foxminded.javaspring.universityschedule.utils.Event;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

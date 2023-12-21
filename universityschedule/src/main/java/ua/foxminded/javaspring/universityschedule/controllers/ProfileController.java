@@ -1,5 +1,7 @@
 package ua.foxminded.javaspring.universityschedule.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -26,9 +28,6 @@ import ua.foxminded.javaspring.universityschedule.services.UserService;
 import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateAdminProfile;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateUserProfile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @Controller

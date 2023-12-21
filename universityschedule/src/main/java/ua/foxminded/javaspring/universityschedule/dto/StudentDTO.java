@@ -1,5 +1,7 @@
 package ua.foxminded.javaspring.universityschedule.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -7,9 +9,6 @@ import ua.foxminded.javaspring.universityschedule.entities.Group;
 import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateUserProfile;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

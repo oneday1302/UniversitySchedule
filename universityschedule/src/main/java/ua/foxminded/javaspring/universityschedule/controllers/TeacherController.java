@@ -3,6 +3,7 @@ package ua.foxminded.javaspring.universityschedule.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,12 +11,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.universityschedule.dto.TeacherDTO;
+import ua.foxminded.javaspring.universityschedule.entities.Role;
+import ua.foxminded.javaspring.universityschedule.entities.Teacher;
 import ua.foxminded.javaspring.universityschedule.mapper.TeacherMapper;
 import ua.foxminded.javaspring.universityschedule.services.CourseService;
 import ua.foxminded.javaspring.universityschedule.services.TeacherService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
+import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 import ua.foxminded.javaspring.universityschedule.validation.CreateEntity;
 import ua.foxminded.javaspring.universityschedule.validation.UpdateEntity;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -52,8 +58,13 @@ public class TeacherController {
     }
 
     @GetMapping("/teachers")
-    public String getTeachers(Model model) {
-        model.addAttribute("teachers", teacherService.getAll());
+    public String getTeachers(Model model, Authentication authentication) {
+        List<Teacher> teachers = teacherService.getAll();
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        if (principal.getAuthorities().contains(Role.TEACHER)) {
+            teachers.remove(principal.unwrap(Teacher.class));
+        }
+        model.addAttribute("teachers", teachers);
         return "/list/teachers";
     }
 

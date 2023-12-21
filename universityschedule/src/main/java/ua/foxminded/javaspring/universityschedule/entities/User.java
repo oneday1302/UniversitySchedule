@@ -1,8 +1,8 @@
 package ua.foxminded.javaspring.universityschedule.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.*;
 
 @NoArgsConstructor
