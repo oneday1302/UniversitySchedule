@@ -16,9 +16,11 @@ import ua.foxminded.javaspring.universityschedule.mapper.StudentMapperImpl;
 import ua.foxminded.javaspring.universityschedule.services.GroupService;
 import ua.foxminded.javaspring.universityschedule.services.StudentService;
 import ua.foxminded.javaspring.universityschedule.services.UserService;
+import ua.foxminded.javaspring.universityschedule.utils.CustomUserDetails;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
@@ -94,9 +96,9 @@ public class StudentControllerTest {
     }
 
     @Test
-    @WithMockUser
     public void getStudents_shouldReturnStudentsView() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/students"))
+        mvc.perform(MockMvcRequestBuilders.get("/students")
+                                          .with(user(new CustomUserDetails(new Student()))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/list/students"))
                 .andExpect(model().attributeExists("students"));
