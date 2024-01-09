@@ -24,4 +24,4 @@ Live demo [_here_](http://www.schedule.lol).
 - bootstrap-datepicker 1.10.0
 - DataTables 1.13.5
 
-##Live Demo
+## Live Demo
