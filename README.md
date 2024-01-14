@@ -1,6 +1,6 @@
 # Schedule
 This is a web application with CRUD operations.
-Live demo [_here_](http://www.schedule.lol).
+Live demo [_here_](http://schedule.lol)
 
 ## Technologies Used
 - Java 17
