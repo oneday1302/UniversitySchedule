@@ -15,8 +15,6 @@ Live demo [_here_](http://schedule.lol)
 - Maven
 - Thymeleaf 3
 - Bootstrap 5
-- jQuery 3.7.1
-- Moment.js 2.29.4
 - FullCalendar 3.9.0
 
 ## Live Demo
