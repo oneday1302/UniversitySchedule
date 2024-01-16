@@ -8,8 +8,6 @@ Live demo [_here_](http://schedule.lol)
 - Spring Boot 3
 - Spring Security 6
 - JUnit 5
-- Mockito 5.7.0
-- Querydsl 5.0.0
 - FlyWay 9
 - PostgreSQL
 - Maven
