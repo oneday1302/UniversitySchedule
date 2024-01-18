@@ -40,7 +40,7 @@ Schedule is a robust web application designed to empower users with the ability 
 7. ### Lesson Management:
    - Admins can create, edit, and delete lessons.
    - Teachers and Students can view data of students.
-8. Search and Filters:
+8. ###Search and Filters:
    - Users can easily search for teachers, students, courses, classrooms, groups  or lessons.
    - Filters to sort and organize information based on various criteria.
 
