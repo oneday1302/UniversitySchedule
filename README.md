@@ -1,4 +1,4 @@
-# Schedule
+# University Schedule
 This is a web application with CRUD operations.
 Live demo [_here_](http://schedule.lol)
 
@@ -16,7 +16,7 @@ Live demo [_here_](http://schedule.lol)
 - FullCalendar 3.9.0
 
 ## About The Project
-Schedule is a robust web application designed to empower users with the ability to efficiently manage their lessons, courses, classrooms, groups, and user roles. The platform is equipped with user-friendly interfaces, allowing both students and teachers to navigate seamlessly through their educational journey. Additionally, administrators have elevated privileges to create and manage users, courses, and more.
+University Schedule is a robust web application designed to empower users with the ability to efficiently manage their lessons, courses, classrooms, groups, and user roles. The platform is equipped with user-friendly interfaces, allowing both students and teachers to navigate seamlessly through their educational journey. Additionally, administrators have elevated privileges to create and manage users, courses, and more.
 
 1. ### User Roles:
    - **Admin**: Can create and manage teachers, students, courses, classrooms, groups and lessons. Has access to all functionalities and data within the platform.
