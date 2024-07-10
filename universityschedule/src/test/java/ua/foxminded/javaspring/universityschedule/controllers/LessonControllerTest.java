@@ -114,7 +114,7 @@ public class LessonControllerTest {
         when(lessonService.findById(1)).thenReturn(lesson);
         mvc.perform(MockMvcRequestBuilders.get("/lessonInfo/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/lessonInfo"))
+                .andExpect(view().name("lessonInfo"))
                 .andExpect(model().attributeExists("lesson"));
     }
 
@@ -137,7 +137,7 @@ public class LessonControllerTest {
     public void addLesson_shouldReturnAddLessonView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/addLesson"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/add/lesson"))
+                .andExpect(view().name("add/lesson"))
                 .andExpect(model().attributeExists("lessonDTO"))
                 .andExpect(model().attributeExists("courses"))
                 .andExpect(model().attributeExists("teachers"))
@@ -204,7 +204,7 @@ public class LessonControllerTest {
         when(lessonService.findById(1)).thenReturn(lesson);
         mvc.perform(MockMvcRequestBuilders.get("/editLesson/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/edit/lesson"))
+                .andExpect(view().name("edit/lesson"))
                 .andExpect(model().attributeExists("lessonDTO"))
                 .andExpect(model().attributeExists("courses"))
                 .andExpect(model().attributeExists("teachers"))

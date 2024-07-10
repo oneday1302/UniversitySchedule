@@ -29,7 +29,7 @@ public class ClassroomController {
         if (!model.containsAttribute("classroomDTO")) {
             model.addAttribute("classroomDTO", new ClassroomDTO());
         }
-        return "/add/classroom";
+        return "add/classroom";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -49,7 +49,7 @@ public class ClassroomController {
     @GetMapping("/classrooms")
     public String getClassrooms(Model model) {
         model.addAttribute("classrooms", classroomService.getAll());
-        return "/list/classrooms";
+        return "list/classrooms";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -58,7 +58,7 @@ public class ClassroomController {
         if (!model.containsAttribute("classroomDTO")) {
             model.addAttribute("classroomDTO", mapper.classroomToDTO(classroomService.findById(id)));
         }
-        return "/edit/classroom";
+        return "edit/classroom";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

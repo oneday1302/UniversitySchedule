@@ -56,7 +56,7 @@ public class TeacherControllerTest {
     public void addTeacher_shouldReturnAddTeacherView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/addTeacher"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/add/teacher"))
+                .andExpect(view().name("add/teacher"))
                 .andExpect(model().attributeExists("courses"))
                 .andExpect(model().attributeExists("teacherDTO"));
     }
@@ -101,7 +101,7 @@ public class TeacherControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/teachers")
                                           .with(user(new CustomUserDetails(new Teacher()))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/list/teachers"))
+                .andExpect(view().name("list/teachers"))
                 .andExpect(model().attributeExists("teachers"));
     }
 
@@ -126,7 +126,7 @@ public class TeacherControllerTest {
         when(teacherService.findById(1)).thenReturn(teacher);
         mvc.perform(MockMvcRequestBuilders.get("/editTeacher/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/edit/teacher"))
+                .andExpect(view().name("edit/teacher"))
                 .andExpect(model().attributeExists("teacherDTO"))
                 .andExpect(model().attributeExists("courses"));
     }

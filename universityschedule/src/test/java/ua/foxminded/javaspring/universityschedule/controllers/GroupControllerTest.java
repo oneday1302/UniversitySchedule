@@ -48,7 +48,7 @@ public class GroupControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/addGroup")
                                           .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/add/group"))
+                .andExpect(view().name("add/group"))
                 .andExpect(model().attributeExists("groupDTO"));
     }
 
@@ -87,7 +87,7 @@ public class GroupControllerTest {
     public void getGroup_shouldReturnGroupsView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/groups"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/list/groups"))
+                .andExpect(view().name("list/groups"))
                 .andExpect(model().attributeExists("groups"));
     }
 
@@ -112,7 +112,7 @@ public class GroupControllerTest {
         when(groupService.findById(1)).thenReturn(group);
         mvc.perform(MockMvcRequestBuilders.get("/editGroup/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/edit/group"))
+                .andExpect(view().name("edit/group"))
                 .andExpect(model().attributeExists("groupDTO"));
     }
 

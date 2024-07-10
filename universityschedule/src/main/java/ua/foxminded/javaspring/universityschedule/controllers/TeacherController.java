@@ -40,7 +40,7 @@ public class TeacherController {
             model.addAttribute("teacherDTO", new TeacherDTO());
         }
         model.addAttribute("courses", courseService.getAll());
-        return "/add/teacher";
+        return "add/teacher";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -65,7 +65,7 @@ public class TeacherController {
             teachers.remove(principal.unwrap(Teacher.class));
         }
         model.addAttribute("teachers", teachers);
-        return "/list/teachers";
+        return "list/teachers";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -75,7 +75,7 @@ public class TeacherController {
             model.addAttribute("teacherDTO", mapper.teacherToDTO(teacherService.findById(id)));
         }
         model.addAttribute("courses", courseService.getAll());
-        return "/edit/teacher";
+        return "edit/teacher";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

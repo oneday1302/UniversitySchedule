@@ -54,7 +54,7 @@ public class LessonController {
     public String lessonInfo(@PathVariable(value = "id") long id, Model model) {
         Lesson lesson = lessonService.findById(id);
         model.addAttribute("lesson", lesson);
-        return "/lessonInfo";
+        return "lessonInfo";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -67,7 +67,7 @@ public class LessonController {
         model.addAttribute("teachers", teacherService.getAll());
         model.addAttribute("groups", groupService.getAll());
         model.addAttribute("classrooms", classroomService.getAll());
-        return "/add/lesson";
+        return "add/lesson";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -94,7 +94,7 @@ public class LessonController {
         model.addAttribute("teachers", teacherService.getAll());
         model.addAttribute("groups", groupService.getAll());
         model.addAttribute("classrooms", classroomService.getAll());
-        return "/edit/lesson";
+        return "edit/lesson";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

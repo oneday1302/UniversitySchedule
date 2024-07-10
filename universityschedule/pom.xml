@@ -5,20 +5,17 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.0</version>
+		<version>3.3.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ua.foxminded.javaspring</groupId>
 	<artifactId>universityschedule</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>UniversitySchedule</name>
 	<description>Web application</description>
 	<properties>
 		<java.version>17</java.version>
-		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-		<querydsl.version>5.0.0</querydsl.version>
-		<jakarta-persistence-api.version>3.1.0</jakarta-persistence-api.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -56,7 +53,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.querydsl</groupId>
@@ -71,16 +75,10 @@
 			<classifier>jakarta</classifier>
 			<version>5.0.0</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -117,6 +115,7 @@
 			<artifactId>datatables</artifactId>
 			<version>1.13.5</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

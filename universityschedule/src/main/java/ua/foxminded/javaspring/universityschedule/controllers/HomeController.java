@@ -41,6 +41,6 @@ public class HomeController {
         model.addAttribute("teachers", teacherService.getAll());
         model.addAttribute("groups", groupService.getAll());
         model.addAttribute("classrooms", classroomService.getAll());
-        return "/home";
+        return "home";
     }
 }

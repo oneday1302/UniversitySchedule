@@ -29,7 +29,7 @@ public class CourseController {
         if (!model.containsAttribute("courseDTO")) {
             model.addAttribute("courseDTO", new CourseDTO());
         }
-        return "/add/course";
+        return "add/course";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -49,7 +49,7 @@ public class CourseController {
     @GetMapping("/courses")
     public String getCourses(Model model) {
         model.addAttribute("courses", courseService.getAll());
-        return "/list/courses";
+        return "list/courses";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -58,7 +58,7 @@ public class CourseController {
         if (!model.containsAttribute("courseDTO")) {
             model.addAttribute("courseDTO", mapper.courseToDTO(courseService.findById(id)));
         }
-        return "/edit/course";
+        return "edit/course";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

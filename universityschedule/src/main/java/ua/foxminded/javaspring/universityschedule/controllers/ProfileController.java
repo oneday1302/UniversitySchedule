@@ -50,7 +50,7 @@ public class ProfileController {
             Student student = principal.unwrap(Student.class);
             model.addAttribute("user", student);
         }
-        return "/profile";
+        return "profile";
     }
 
     @GetMapping("/profile/edit")
@@ -68,7 +68,7 @@ public class ProfileController {
                 model.addAttribute("userDTO", studentMapper.studentToDTO(principal.unwrap(Student.class)));
             }
         }
-        return "/editProfile";
+        return "editProfile";
     }
 
     @PostMapping("/profile/edit")
@@ -138,7 +138,7 @@ public class ProfileController {
         if (!model.containsAttribute("passwordDTO")) {
             model.addAttribute("passwordDTO", new PasswordDTO());
         }
-        return "/editPassword";
+        return "editPassword";
     }
 
     @PostMapping("/profile/editPassword")

@@ -41,7 +41,7 @@ public class StudentController {
             model.addAttribute("studentDTO", new StudentDTO());
         }
         model.addAttribute("groups", groupService.getAll());
-        return "/add/student";
+        return "add/student";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -66,7 +66,7 @@ public class StudentController {
             students.remove(principal.unwrap(Student.class));
         }
         model.addAttribute("students", students);
-        return "/list/students";
+        return "list/students";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -76,7 +76,7 @@ public class StudentController {
             model.addAttribute("studentDTO", mapper.studentToDTO(studentService.findById(id)));
         }
         model.addAttribute("groups", groupService.getAll());
-        return "/edit/student";
+        return "edit/student";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
