@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  flyway:
+    schemas: university
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: kovalchukvladyslav2
+    password: impaznlkvgtaeino
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

@@ -46,7 +46,7 @@ public class ClassroomControllerTest {
     public void addClassroom_shouldReturnAddClassroomView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/addClassroom"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/add/classroom"))
+                .andExpect(view().name("add/classroom"))
                 .andExpect(model().attributeExists("classroomDTO"));
     }
 
@@ -84,7 +84,7 @@ public class ClassroomControllerTest {
     public void getClassrooms_shouldReturnViewClassrooms() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/classrooms"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/list/classrooms"))
+                .andExpect(view().name("list/classrooms"))
                 .andExpect(model().attributeExists("classrooms"));
     }
 
@@ -109,7 +109,7 @@ public class ClassroomControllerTest {
         when(classroomService.findById(1)).thenReturn(classroom);
         mvc.perform(MockMvcRequestBuilders.get("/editClassroom/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/edit/classroom"))
+                .andExpect(view().name("edit/classroom"))
                 .andExpect(model().attributeExists("classroomDTO"));
     }
 

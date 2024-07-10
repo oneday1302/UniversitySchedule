@@ -11,7 +11,7 @@
 </head>
 <body style="background-color: #eee; height: 100%;">
 <section>
-    <header th:insert="~{/menu :: menu}"></header>
+    <header th:insert="~{menu :: menu}"></header>
     <div class="container py-5">
         <form th:action="@{/addCourse}" th:object="${courseDTO}" method="post">
             <div class="card mb-4">

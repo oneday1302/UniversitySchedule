@@ -44,7 +44,7 @@ public class HomeControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/home")
                                           .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/home"))
+                .andExpect(view().name("home"))
                 .andExpect(model().attributeExists("courses"))
                 .andExpect(model().attributeExists("teachers"))
                 .andExpect(model().attributeExists("groups"))

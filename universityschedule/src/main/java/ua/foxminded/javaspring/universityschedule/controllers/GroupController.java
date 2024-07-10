@@ -29,7 +29,7 @@ public class GroupController {
         if (!model.containsAttribute("groupDTO")) {
             model.addAttribute("groupDTO", new GroupDTO());
         }
-        return "/add/group";
+        return "add/group";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -49,7 +49,7 @@ public class GroupController {
     @GetMapping("/groups")
     public String getGroup(Model model) {
         model.addAttribute("groups", groupService.getAll());
-        return "/list/groups";
+        return "list/groups";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -58,7 +58,7 @@ public class GroupController {
         if (!model.containsAttribute("groupDTO")) {
             model.addAttribute("groupDTO", mapper.groupToDTO(groupService.findById(id)));
         }
-        return "/edit/group";
+        return "edit/group";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

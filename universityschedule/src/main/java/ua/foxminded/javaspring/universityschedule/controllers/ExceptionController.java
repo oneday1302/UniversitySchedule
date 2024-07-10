@@ -14,7 +14,7 @@ public class ExceptionController {
     @ExceptionHandler(SQLException.class)
     public String psqlException(SQLException e, Model model) {
         model.addAttribute("errorMessage", e.getMessage());
-        return "/errorPage";
+        return "errorPage";
     }
 
     @ExceptionHandler(PasswordNotMatchException.class)

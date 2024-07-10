@@ -61,7 +61,7 @@ public class ProfileControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/profile")
                                           .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/profile"))
+                .andExpect(view().name("profile"))
                 .andExpect(model().attributeExists("user"));
     }
 
@@ -80,7 +80,7 @@ public class ProfileControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/profile/edit")
                                           .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/editProfile"))
+                .andExpect(view().name("editProfile"))
                 .andExpect(model().attributeExists("userDTO"))
                 .andExpect(model().attributeExists("courses"));
     }
@@ -92,7 +92,7 @@ public class ProfileControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/profile/edit")
                                           .with(user(new CustomUserDetails(teacher))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/editProfile"))
+                .andExpect(view().name("editProfile"))
                 .andExpect(model().attributeExists("userDTO"));
     }
 
@@ -103,7 +103,7 @@ public class ProfileControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/profile/edit")
                                           .with(user(new CustomUserDetails(student))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/editProfile"))
+                .andExpect(view().name("editProfile"))
                 .andExpect(model().attributeExists("userDTO"));
     }
 
@@ -194,7 +194,7 @@ public class ProfileControllerTest {
                                           .with(user(new CustomUserDetails(new Teacher()))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("passwordDTO"))
-                .andExpect(view().name("/editPassword"));
+                .andExpect(view().name("editPassword"));
     }
 
     @Test

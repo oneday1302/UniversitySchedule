@@ -47,7 +47,7 @@ public class CourseControllerTest {
     public void addCourse_shouldReturnAddCourseView() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/addCourse"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/add/course"))
+                .andExpect(view().name("add/course"))
                 .andExpect(model().attributeExists("courseDTO"));;
     }
 
@@ -85,7 +85,7 @@ public class CourseControllerTest {
     public void getCourses_shouldReturnViewCourses() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/courses"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/list/courses"))
+                .andExpect(view().name("list/courses"))
                 .andExpect(model().attributeExists("courses"));
     }
 
@@ -110,7 +110,7 @@ public class CourseControllerTest {
         when(courseService.findById(1)).thenReturn(course);
         mvc.perform(MockMvcRequestBuilders.get("/editCourse/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/edit/course"))
+                .andExpect(view().name("edit/course"))
                 .andExpect(model().attributeExists("courseDTO"));
     }
 
