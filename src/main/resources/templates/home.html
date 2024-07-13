@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- JQuery -->
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+
+    <!-- FullCalendar -->
+    <link rel="stylesheet" th:href="@{/webjars/fullcalendar/fullcalendar.min.css}" type="text/css"/>
+    <script th:src="@{/webjars/momentjs/min/moment.min.js}"></script>
+    <script th:src="@{/webjars/fullcalendar/fullcalendar.min.js}"></script>
+    <script th:src="@{/fullCalendar.js}"></script>
+
+    <!-- Datepicker -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" type="text/css"/>
+    <script th:src="@{/webjars/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/datepicker.js}"></script>
+</head>
+<body style="background-color: #eee; height: 100%;">
+<section>
+    <header th:insert="~{menu :: menu}"></header>
+    <div class="container py-5">
+        <div class="card mb-4" style="background-color: #eee;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Filter by course:</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <select class="form-control col-4 mb-4" name="select_course" id="select_course">
+                            <option th:value="0" th:text="All" selected>
+                            <option th:each="course : ${courses}" th:value="${course.getId}" th:text="${course.getName}">
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Filter by teacher:</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <select class="form-control col-4 mb-4" name="select_teacher" id="select_teacher">
+                            <option th:value="0" th:text="All" th:selected="${teacherSelected}">
+                            <option th:each="teacher : ${teachers}"
+                                    th:value="${teacher.getId}"
+                                    th:text="${teacher.getFullName}"
+                                    th:selected="(${teacher.getId} == ${teacherId})">
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Filter by group:</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <select class="form-control col-4 mb-4" name="select_group" id="select_group">
+                            <option th:value="0" th:text="All" th:selected="${groupSelected}">
+                            <option th:each="group : ${groups}"
+                                    th:value="${group.getId}"
+                                    th:text="${group.getName}"
+                                    th:selected="(${group.getId} == ${groupId})">
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Filter by classroom:</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <select class="form-control col-4 mb-4" name="select_classroom" id="select_classroom">
+                            <option th:value="0" th:text="All" selected>
+                            <option th:each="classroom : ${classrooms}" th:value="${classroom.getId}" th:text="${classroom.getName}">
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Date from:</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <div id="date_from" class="input-group date" data-date-format="dd-mm-yyyy">
+                            <input class="form-control" type="text" name="dateFrom" id="dateFrom">
+                            <span class="input-group-addon">
+									<em class="glyphicon glyphicon-calendar"></em>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Date to:</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <div id="date_to" class="input-group date" data-date-format="dd-mm-yyyy">
+                            <input class="form-control" type="text" name="dateTo" id="dateTo">
+                            <span class="input-group-addon">
+									<em class="glyphicon glyphicon-calendar"></em>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='calendar'></div>
+    </div>
+</section>
+</body>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>List of teachers</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- JQuery -->
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/webjars/datatables/css/dataTables.bootstrap5.min.css}" type="text/css"/>
+    <script th:src="@{/webjars/datatables/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/webjars/datatables/js/dataTables.bootstrap5.min.js}"></script>
+    <script th:src="@{/tableSort.js}"></script>
+</head>
+<body style="background-color: #eee; height: 100%;">
+<section>
+    <header th:insert="~{menu :: menu}"></header>
+    <div class="container">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Full name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Course</th>
+                <th sec:authorize="hasAuthority('ADMIN')" scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="teacher : ${teachers}">
+                <td th:text="${teacher.getId}">
+                <td th:text="${teacher.getFullName}">
+                <td th:text="${teacher.getEmail}">
+                <td>
+                    <span th:each="course, iterStat : ${teacher.getCourses}" th:text="!${iterStat.last} ? ${course.getName} + ', ' : ${course.getName}"></span>
+                </td>
+                <td sec:authorize="hasAuthority('ADMIN')">
+                    <a th:href="'/editTeacher/' + ${teacher.getId}" class="btn btn-primary" style="width: 80px">Edit</a>
+                    <form th:action="@{'/deleteTeacher/' + ${teacher.getId}}" th:method="delete" style="display: inline-block;">
+                        <button type="submit" class="btn btn-danger" style="width: 80px;" >Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>

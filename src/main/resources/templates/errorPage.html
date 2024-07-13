@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body style="background-color: #eee; height: 100%;">
+    <section>
+        <header th:insert="~{menu :: menu}"></header>
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Opps.. Sorry about this.</h4>
+            <p th:utext="${errorMessage}"></p>
+        </div>
+    </section>
+</body>
+</html>
