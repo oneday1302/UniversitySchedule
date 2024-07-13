@@ -1,1 +1,0 @@
-insert into university.courses ("name") values ('Mathematics');
